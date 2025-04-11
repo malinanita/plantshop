@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .cart-item { display: inline-block; margin: 10px; padding: 10px; border: 1px solid #ddd; width: 200px; }
+        .cart-item img { width: 100px; height: 100px; object-fit: cover; }
+        form { margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Slutför ditt köp</h1>
+
+<div id="cart-container"></div>
+
+<h2>Leveransuppgifter</h2>
+<form id="checkout-form">
+    <input type="text" id="name" placeholder="Namn" required><br><br>
+    <input type="text" id="address" placeholder="Adress" required><br><br>
+    <input type="email" id="email" placeholder="E-post" required><br><br>
+    <button type="submit">Slutför köp</button>
+</form>
+
+<script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function displayCart() {
+        const cartContainer = document.getElementById("cart-container");
+        cartContainer.innerHTML = "";
+        let total = 0;
+
+        if (cart.length === 0) {
+            cartContainer.innerHTML = "<p>Din kundvagn är tom.</p>";
+            return;
+        }
+
+        cart.forEach(item => {
+            total += item.price * item.quantity;
+            const cartItem = document.createElement("div");
+            cartItem.classList.add("cart-item");
+
+            cartItem.innerHTML = `
+                <img src="${item.image}" alt="${item.name}">
+                <h3>${item.name}</h3>
+                <p>Pris: ${item.price} kr</p>
+                <p>Antal: ${item.quantity}</p>
+            `;
+            cartContainer.appendChild(cartItem);
+        });
+
+        const totalDiv = document.createElement("h3");
+        totalDiv.innerText = `Total: ${total} kr`;
+        cartContainer.appendChild(totalDiv);
+    }
+
+    document.getElementById("checkout-form").addEventListener("submit", function(event) {
+        event.preventDefault(); // Förhindra sidladdning
+
+        // Hämta inputvärden
+        const name = document.getElementById("name").value;
+        const address = document.getElementById("address").value;
+        const email = document.getElementById("email").value;
+
+        // Simulera orderbekräftelse
+        alert(`Tack för ditt köp, ${name}! En orderbekräftelse har skickats till ${email}.`);
+
+        // Töm kundvagnen
+        localStorage.removeItem("cart");
+        cart = [];
+        displayCart();
+    });
+
+    displayCart();
+</script>
+
+</body>
+</html>

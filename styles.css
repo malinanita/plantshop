@@ -1,0 +1,93 @@
+body { 
+    font-family: Arial, sans-serif; 
+    text-align: center; 
+    margin: 0; 
+}
+
+main { 
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 20px; 
+    padding: 20px; 
+}
+
+article { 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    width: 200px; 
+    transition: width 0.3s ease; /* Lägg till övergångseffekt för mjukare förändring */
+}
+
+figure { 
+    margin: 0; 
+}
+
+img { 
+    width: 200px; 
+    height: 250px;
+    object-fit: cover; 
+    padding: none;
+}
+
+#cart-icon {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+#cart-dropdown {
+    display: none; /* Dold initialt */
+    position: fixed;
+    top: 60px;
+    right: 20px;
+    width: 250px;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    text-align: left;
+}
+
+#cart-dropdown.show {
+    display: block; /* När 'show' klassen läggs till */
+}
+
+.cart-item { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 5px 0; 
+}
+
+#cart-dropdown button { 
+    width: 100%; 
+    color: black; 
+    background-color: white; 
+    border: none; 
+    padding: 10px; 
+    margin-top: 10px; 
+    cursor: pointer; 
+}
+
+/* Media query för mobiler */
+@media (max-width: 768px) {
+    article { 
+        width: 90%; /* Gör artikeln bredare på mobil */
+        margin-bottom: 20px; /* Lägg till avstånd mellan produkterna */
+    }
+
+    img{
+        max-width: 80%;
+    }
+
+    main { 
+        flex-direction: column; /* Stapla produkterna vertikalt på mobiler */
+        align-items: center; /* Centrera produkterna */
+    }
+}
