@@ -20,12 +20,15 @@ async function fetchProducts(category = "") {
             img.alt = product.name;
             figure.appendChild(img);
 
-            // Skapa produktnamn, beskrivning och pris
+            const a = document.createElement('a');
+            a.href = `product.html?id=${product.id}`;
+            a.textContent = product.name;
+            a.classList.add('product-link'); // valfritt för styling
             const h3 = document.createElement('h3');
-            h3.textContent = product.name;
-
-            const pDesc = document.createElement('p');
-            pDesc.textContent = product.description;
+            h3.appendChild(a);
+            article.appendChild(h3);
+            img.onclick = () => window.location.href = `product.html?id=${product.id}`;
+            img.style.cursor = 'pointer';
 
             const pPrice = document.createElement('p');
             const strong = document.createElement('strong');
@@ -40,7 +43,6 @@ async function fetchProducts(category = "") {
             // Lägg till alla element i article
             article.appendChild(figure);
             article.appendChild(h3);
-            article.appendChild(pDesc);
             article.appendChild(pPrice);
             article.appendChild(button);
 
