@@ -87,16 +87,14 @@ img {
 }
 
 /* Media query för mobiler */
-@media (max-width: 768px) {
-    article { 
-        width: 90%; /* Gör artikeln bredare på mobil */
-        margin-bottom: 20px; /* Lägg till avstånd mellan produkterna */
+@media (max-width: 1000px) {
+    #products-container {
+        display: grid;
+        grid-template-columns: repeat(2, 0fr);
     }
+
     img{
-        max-width: 80%;
+        max-width: 100%;
     }
-    main { 
-        flex-direction: column; /* Stapla produkterna vertikalt på mobiler */
-        align-items: center; /* Centrera produkterna */
-    }
+    
 }
