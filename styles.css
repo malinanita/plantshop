@@ -3,7 +3,6 @@ body {
     text-align: center; 
     margin: 0; 
 }
-
 main { 
     display: flex; 
     flex-wrap: wrap; 
@@ -29,7 +28,6 @@ img {
     object-fit: cover; 
     padding: none;
 }
-
 #cart-icon {
     position: fixed;
     top: 20px;
@@ -41,7 +39,6 @@ img {
     cursor: pointer;
     font-size: 18px;
 }
-
 #cart-dropdown {
     display: none; /* Dold initialt */
     position: fixed;
@@ -54,17 +51,14 @@ img {
     padding: 10px;
     text-align: left;
 }
-
 #cart-dropdown.show {
     display: block; /* När 'show' klassen läggs till */
 }
-
 .cart-item { 
     display: flex; 
     justify-content: space-between; 
     padding: 5px 0; 
 }
-
 #cart-dropdown button { 
     width: 100%; 
     color: black; 
@@ -75,17 +69,32 @@ img {
     cursor: pointer; 
 }
 
+/* Filter dropdown */
+.filter-dropdown {
+    display: none; /* Dold initialt */
+    margin-top: 10px;
+}
+
+#filter-dropdown.hidden {
+    display: none;
+}
+#filter-dropdown {
+    margin-top: 10px;
+}
+
+#filter-toggle {
+    margin-bottom: 10px;
+}
+
 /* Media query för mobiler */
 @media (max-width: 768px) {
     article { 
         width: 90%; /* Gör artikeln bredare på mobil */
         margin-bottom: 20px; /* Lägg till avstånd mellan produkterna */
     }
-
     img{
         max-width: 80%;
     }
-
     main { 
         flex-direction: column; /* Stapla produkterna vertikalt på mobiler */
         align-items: center; /* Centrera produkterna */

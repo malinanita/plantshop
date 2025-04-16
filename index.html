@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
 <header>
     <h1>Välkommen till Växtbutiken</h1>
     <button id="cart-icon">🛒 (<span id="cart-count">0</span>)</button>
@@ -15,16 +14,12 @@
 
 <!-- Filter för produktkategorier -->
 <section id="filters">
-    <h3>Filtrera produkter</h3>
-    <label>
-        <input type="checkbox" class="category-filter" value="Rankande"> Rankande
-    </label>
-    <label>
-        <input type="checkbox" class="category-filter" value="Lättskötta"> Lättskötta
-    </label>
-    <label>
-        <input type="checkbox" class="category-filter" value="Luftrenande"> Luftrenande
-    </label>
+    <button id="filter-toggle">Filtrera +</button>
+    <div id="filter-dropdown" class="hidden">
+        <label><input type="checkbox" class="category-filter" value="Rankande"> Rankande</label><br>
+        <label><input type="checkbox" class="category-filter" value="Lättskötta"> Lättskötta</label><br>
+        <label><input type="checkbox" class="category-filter" value="Luftrenande"> Luftrenande</label>
+    </div>
 </section>
 
 <!-- Dropdown för kundvagnen -->
@@ -35,8 +30,6 @@
 </div>
 
 <main id="products-container"></main>
-
-
 <script src="script.js"></script>
 </body>
 </html>

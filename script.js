@@ -73,7 +73,6 @@ function addToCart(id, name, image, price) {
     updateCartUI(); // Uppdatera UI för kundvagnen
 }
 
-// Funktion för att ta bort produkter från kundvagnen
 function removeFromCart(id) {
     cart = cart.filter(item => item.id !== id); // Ta bort produkt från kundvagnen
     localStorage.setItem("cart", JSON.stringify(cart)); // Spara till localStorage
@@ -93,44 +92,43 @@ function updateCartUI() {
             const cartItem = document.createElement("div");
             cartItem.classList.add("cart-item");
 
-            // Skapa innehållet för varje varukorgsartikel
             const span = document.createElement('span');
             span.textContent = `${item.name} (${item.quantity}st) - ${item.price * item.quantity} kr`;
 
-            // Skapa en knapp för att ta bort från kundvagnen
             const removeButton = document.createElement('button');
             removeButton.textContent = '❌';
             removeButton.onclick = () => removeFromCart(item.id);
 
-            // Lägg till span och removeButton till cartItem
             cartItem.appendChild(span);
             cartItem.appendChild(removeButton);
 
-            // Lägg till cartItem i cartContainer
             cartContainer.appendChild(cartItem);
         });
     }
-
-    // Uppdatera antalet produkter i kundvagnen
     cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
 }
 
-// Toggle-funktion för att visa/dölja dropdown
 function toggleCart() {
     const cartDropdown = document.getElementById("cart-dropdown");
     cartDropdown.classList.toggle('show'); // Toggla 'show' för att visa/dölja
 }
 
-// Lägg till eventlyssnare för att toggla kundvagnens dropdown
+function toggleFilterDropdown() {
+    const filterDropdown = document.getElementById("filter-dropdown");
+    filterDropdown.classList.toggle('show'); // Toggla 'show' för att visa/dölja filter
+}
+
 document.getElementById("cart-icon").addEventListener("click", () => {
     toggleCart(); // Anropa toggleCart
 });
 
-// Lägg till eventlyssnare för filter
+document.getElementById("filter-toggle").addEventListener("click", () => {
+    document.getElementById("filter-dropdown").classList.toggle("hidden");
+});
+
 document.querySelectorAll('.category-filter').forEach(filter => {
     filter.addEventListener('change', applyFilter); // Applicera filter när kategori ändras
 });
 
-// Hämta och uppdatera produkterna när sidan laddas
 fetchProducts();
 updateCartUI();
