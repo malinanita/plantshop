@@ -63,16 +63,24 @@ function applyFilter() {
 
 // Funktion för att lägga till produkter i kundvagnen
 function addToCart(id, name, image, price) {
-    let existingItem = cart.find(item => item.id === id); // Hitta om produkten redan finns
+    let existingItem = cart.find(item => item.id === id);
 
     if (existingItem) {
-        existingItem.quantity++; // Om produkten finns, öka mängden
+        existingItem.quantity++;
     } else {
-        cart.push({ id, name, image, price, quantity: 1 }); // Lägg till ny produkt
+        const newItem = {
+            id,
+            name,
+            image, // inte image_url!
+            price,
+            quantity: 1
+        };
+        cart.push(newItem);
+        console.log("Lade till i kundvagnen:", newItem); // debug
     }
 
-    localStorage.setItem("cart", JSON.stringify(cart)); // Spara till localStorage
-    updateCartUI(); // Uppdatera UI för kundvagnen
+    localStorage.setItem("cart", JSON.stringify(cart));
+    updateCartUI();
 }
 
 function removeFromCart(id) {
@@ -88,25 +96,42 @@ function updateCartUI() {
     cartContainer.innerHTML = ""; // Rensa gammal kundvagnsinformation
 
     if (cart.length === 0) {
-        cartContainer.innerHTML = "<p>Kundvagnen är tom.</p>"; // Om kundvagnen är tom
+        cartContainer.innerHTML = "<p>Kundvagnen är tom.</p>";
     } else {
         cart.forEach(item => {
             const cartItem = document.createElement("div");
             cartItem.classList.add("cart-item");
+            cartItem.style.display = "flex";
+            cartItem.style.alignItems = "center";
+            cartItem.style.marginBottom = "10px";
+            cartItem.style.gap = "10px";
 
-            const span = document.createElement('span');
-            span.textContent = `${item.name} (${item.quantity}st) - ${item.price * item.quantity} kr`;
+            const img = document.createElement("img");
+            img.src = item.image;
+            img.alt = item.name;
+            img.style.width = "50px";
+            img.style.height = "50px";
+            img.style.objectFit = "cover";
+            img.style.borderRadius = "5px";
 
-            const removeButton = document.createElement('button');
+            const span = document.createElement("span");
+            span.textContent = `${item.name} (${item.quantity} st) - ${item.price * item.quantity} kr`;
+
+            const removeButton = document.createElement("button");
             removeButton.textContent = '❌';
             removeButton.onclick = () => removeFromCart(item.id);
+            removeButton.style.marginLeft = "auto";
+            removeButton.style.cursor = "pointer";
 
+            cartItem.appendChild(img);
             cartItem.appendChild(span);
             cartItem.appendChild(removeButton);
 
             cartContainer.appendChild(cartItem);
         });
     }
+
+    // Uppdatera räknaren i kundvagnsikonen
     cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
 }
 

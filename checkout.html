@@ -13,6 +13,8 @@
 </head>
 <body>
 
+<a href="shop.html" class="back-button">← Tillbaka till butiken</a>
+
 <h1>Slutför ditt köp</h1>
 
 <div id="cart-container"></div>
@@ -27,6 +29,7 @@
 
 <script>
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    console.log("Cart in localStorage:", cart); // Debug: se vad som finns i localStorage
 
     function displayCart() {
         const cartContainer = document.getElementById("cart-container");

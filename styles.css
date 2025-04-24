@@ -28,6 +28,64 @@ img {
     object-fit: cover; 
     padding: none;
 }
+
+body.landing {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background: url('images/plants4.webp') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+  }
+  
+  main.intro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  
+  section.overlay {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 3rem;
+    text-align: left;
+    max-width: 500px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  }
+  
+  section.overlay .logo {
+    margin-top: 0;
+  }
+  
+  .btn {
+    background: none;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: smaller;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn:hover {
+    color: #ffb222;
+  }
+  
+  .logo {
+    margin-bottom: 0.3rem;
+    font-size: 60px;
+    font-weight: lighter;
+    color: #ffb222;
+  }
+  
+  .slogan {
+    margin-top: 0;
+  }
+
 #cart-icon {
     position: fixed;
     top: 20px;
@@ -59,6 +117,14 @@ img {
     justify-content: space-between; 
     padding: 5px 0; 
 }
+
+.cart-item img {
+    width: 100%;
+    height: auto;
+    max-width: 200px; /* sätter en övre gräns */
+    object-fit: cover;
+}
+
 #cart-dropdown button { 
     width: 100%; 
     color: black; 

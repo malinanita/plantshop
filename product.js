@@ -30,11 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
   
   function renderProduct(product) {
     const container = document.getElementById("product-detail");
-
-    const backBtn = document.createElement("a");
-    backBtn.textContent = "← Tillbaka till butiken";
-    backBtn.href = "index.html";
-    backBtn.classList.add("back-button");
   
     const img = document.createElement("img");
     img.src = product.image_url;
@@ -52,7 +47,6 @@ document.addEventListener("DOMContentLoaded", () => {
     description.textContent = product.description;
     description.classList.add("description");
   
-    container.appendChild(backBtn);
     container.appendChild(img);
     container.appendChild(name);
     container.appendChild(price);
