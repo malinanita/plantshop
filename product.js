@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     description.textContent = product.description;
     description.classList.add("description");
   
+
     container.appendChild(img);
     container.appendChild(name);
     container.appendChild(price);
