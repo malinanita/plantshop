@@ -15,7 +15,7 @@ main {
 article { 
     padding: 10px; 
     border: 1px solid #ddd; 
-    width: 200px; 
+    width: 230px; 
     transition: width 0.3s ease; /* Lägg till övergångseffekt för mjukare förändring */
 }
 
@@ -60,7 +60,7 @@ section.overlay .logo {
     margin-top: 0;
 }
   
-.btn {
+.proceed-btn {
     background: none;
     margin-top: 1.5rem;
     padding: 0.75rem 1.5rem;
@@ -72,15 +72,46 @@ section.overlay .logo {
     transition: background-color 0.3s;
 }
   
-.btn:hover {
+.proceed-btn:hover {
     color: #ffb222;
 }
+
+/* Stil för knappar med klassen 'add-to-cart-btn' */
+.add-to-cart-btn {
+    background-color: #ffbc3f; /* Grön färg för knappen */
+    color: black; /* Textfärg vit */
+    border: none;
+    padding: 0.5em 1.2em; /* Lite inre avstånd så att knappen blir större */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 20px; /* Rundade hörn */
+    transition: background-color 0.3s, transform 0.2s; /* Smidig övergång */
+}
+
+.add-to-cart-btn:hover {
+    background-color: rgb(250, 167, 0); 
+    transform: scale(1.05); /* Förstoringseffekt vid hover */
+}
+
+.add-to-cart-btn:focus {
+    outline: none; /* Tar bort fokusramen */
+}
+
+.add-to-cart-btn:active {
+    transform: scale(1); /* Förhindrar ytterligare förstoring när knappen är aktiv */
+    background-color: rgba(201, 134, 0, 0.7);
+}
+
   
 .logo {
     margin-bottom: 0.3rem;
     font-size: 60px;
     font-weight: lighter;
     color: #ffb222;
+    
 }
   
 .slogan {
@@ -215,7 +246,7 @@ form {
     align-items: center;
     padding: 10px;
     border-bottom: 1px solid #ddd;
-    width: 60%; 
+    width: 95%; 
     box-sizing: border-box;
     margin-bottom: 10px;
 }
@@ -274,11 +305,6 @@ form button:hover {
 
 /* Media query för mobiler */
 @media (max-width: 1000px) {
-    #products-container {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-    }
-
     img {
         max-width: 100%;
     }

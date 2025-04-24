@@ -38,6 +38,7 @@ async function fetchProducts(category = "") {
             // Skapa en knapp för att lägga till i kundvagn
             const button = document.createElement('button');
             button.textContent = 'Lägg i kundvagn';
+            button.classList.add('add-to-cart-btn');
             button.onclick = () => addToCart(product.id, product.name, product.image_url, product.price);
 
             // Lägg till alla element i article
