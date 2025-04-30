@@ -30,25 +30,6 @@
         </section>
     </main>
 
-    <script>const loginForm = document.getElementById('login-form');
-
-        loginForm.addEventListener('submit', async (e) => {
-          e.preventDefault(); // Förhindra vanlig formulärpost
-        
-          const formData = new FormData(loginForm);
-        
-          const response = await fetch('login.php', {
-            method: 'POST',
-            body: formData
-          });
-        
-          const result = await response.json();
-          if (result.success) {
-            // Visa välkomstmeddelande
-          } else {
-            alert("Fel e-post eller lösenord.");
-          }
-        });
-        </script>
+    <script src="script.js"></script>
 </body>
 </html>

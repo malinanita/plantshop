@@ -1,35 +1,52 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrering | Elm</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Registrera konto</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Elm</h1>
-        <nav>
-            <a href="shop.html">Butik</a>
-            <a href="login.html">Profil</a>
-        </nav>
-    </header>
-    
-    <main>
-        <section id="register-section">
-            <h2>Registrera dig</h2>
-            <form id="register-form">
-                <label for="username">Användarnamn</label>
-                <input type="text" id="username" required>
-                <label for="email">E-post</label>
-                <input type="email" id="email" required>
-                <label for="password">Lösenord</label>
-                <input type="password" id="password" required>
-                <button type="submit">Registrera</button>
-            </form>
-        </section>
-    </main>
+  <h1>Skapa konto</h1>
 
-    <script src="script.js"></script>
+  <form id="register-form">
+    <input type="text" name="name" placeholder="Namn" required><br>
+    <input type="email" name="email" placeholder="E-post" required><br>
+    <input type="password" name="password" placeholder="Lösenord" required><br>
+    <button type="submit">Registrera</button>
+  </form>
+
+  <p id="feedback"></p>
+  <p>Har du redan ett konto? <a href="profile.html">Logga in här</a>.</p>
+
+  <script>
+    const form = document.getElementById('register-form');
+    const feedback = document.getElementById('feedback');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch('register.php', {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          feedback.style.color = 'green';
+          feedback.textContent = 'Registrering lyckades! Du kan nu logga in.';
+          form.reset();
+        } else {
+          feedback.style.color = 'red';
+          feedback.textContent = result.message || 'Registrering misslyckades.';
+        }
+      } catch (error) {
+        feedback.style.color = 'red';
+        feedback.textContent = 'Kunde inte kontakta servern.';
+        console.error(error);
+      }
+    });
+  </script>
 </body>
 </html>

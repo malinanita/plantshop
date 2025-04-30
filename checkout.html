@@ -28,58 +28,33 @@
         </form>
 
         <script>
-            let cart = JSON.parse(localStorage.getItem("cart")) || [];
-            console.log("Cart in localStorage:", cart); // Debug: se vad som finns i localStorage
+            document.getElementById("checkout-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+    const name = document.getElementById("name").value;
+    const address = document.getElementById("address").value;
+    const email = document.getElementById("email").value;
 
-            function displayCart() {
-                const cartContainer = document.getElementById("cart-container");
-                cartContainer.innerHTML = "";
-                let total = 0;
+    try {
+        const response = await fetch("place_order.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ cart, name, address, email })
+        });
 
-                if (cart.length === 0) {
-                    cartContainer.innerHTML = "<p>Din kundvagn är tom.</p>";
-                    return;
-                }
-
-                cart.forEach(item => {
-                    total += item.price * item.quantity;
-                    const cartItem = document.createElement("div");
-                    cartItem.classList.add("cart-item");
-
-                    cartItem.innerHTML = `
-                        <img src="${item.image}" alt="${item.name}">
-                        <div>
-                            <h3>${item.name}</h3>
-                            <p>Pris: ${item.price} kr</p>
-                            <p>Antal: ${item.quantity}</p>
-                        </div>
-                    `;
-                    cartContainer.appendChild(cartItem);
-                });
-
-                const totalDiv = document.createElement("h3");
-                totalDiv.innerText = `Total: ${total} kr`;
-                cartContainer.appendChild(totalDiv);
-            }
-
-            document.getElementById("checkout-form").addEventListener("submit", function(event) {
-                event.preventDefault(); // Förhindra sidladdning
-
-                // Hämta inputvärden
-                const name = document.getElementById("name").value;
-                const address = document.getElementById("address").value;
-                const email = document.getElementById("email").value;
-
-                // Simulera orderbekräftelse
-                alert(`Tack för ditt köp, ${name}! En orderbekräftelse har skickats till ${email}.`);
-
-                // Töm kundvagnen
-                localStorage.removeItem("cart");
-                cart = [];
-                displayCart();
-            });
-
+        const result = await response.json();
+        if (result.success) {
+            alert(`Tack för ditt köp! Din order-ID är ${result.order_id}.`);
+            localStorage.removeItem("cart");
+            cart = [];
             displayCart();
+        } else {
+            alert("Fel: " + result.error);
+        }
+    } catch (err) {
+        alert("Något gick fel vid beställningen.");
+        console.error(err);
+    }
+});
         </script>
     </body>
 </html>

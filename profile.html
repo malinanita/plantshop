@@ -1,28 +1,71 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Min Profil | Elm</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Profil</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Elm</h1>
-        <nav>
-            <a href="shop.html">Butik</a>
-            <a href="login.html" id="profile-link">Profil</a>
-        </nav>
-    </header>
+  <h1>Min profil</h1>
 
-    <main id="profile-page">
-        <section id="profile-section">
-            <h2>Välkommen, <span id="username"></span></h2>
-            <p>E-post: <span id="email"></span></p>
-            <button id="logout-button">Logga ut</button>
-        </section>
-    </main>
+  <div id="user-panel">
+    <form id="login-form">
+      <input type="email" name="email" placeholder="E-post" required>
+      <input type="password" name="password" placeholder="Lösenord" required>
+      <button type="submit">Logga in</button>
+    </form>
 
-    <script src="script.js"></script>
+    <div id="welcome-msg" style="display:none;"></div>
+    <div id="extra-links" style="display:none;">
+      <a href="order_history.php">Visa mina ordrar</a>
+    </div>
+    <button id="logout-btn" style="display:none;">Logga ut</button>
+  </div>
+
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const logoutBtn = document.getElementById('logout-btn');
+    const welcomeMsg = document.getElementById('welcome-msg');
+    const extraLinks = document.getElementById('extra-links');
+
+    // Kolla om redan inloggad (via session eller cookie)
+    window.addEventListener('DOMContentLoaded', async () => {
+      const res = await fetch('check_session.php');
+      const data = await res.json();
+
+      if (data.loggedIn) {
+        loginForm.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        welcomeMsg.style.display = 'block';
+        welcomeMsg.textContent = `Välkommen, ${data.name || data.email}!`;
+        extraLinks.style.display = 'block';
+      }
+    });
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(loginForm);
+
+      const response = await fetch('login.php', {
+        method: 'POST',
+        body: formData
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        loginForm.style.display = 'none';
+        logoutBtn.style.display = 'inline-block';
+        welcomeMsg.style.display = 'block';
+        welcomeMsg.textContent = `Välkommen, ${result.name || result.email}!`;
+        extraLinks.style.display = 'block';
+      } else {
+        alert('Fel e-post eller lösenord.');
+      }
+    });
+
+    logoutBtn.addEventListener('click', () => {
+      fetch('logout.php').then(() => location.reload());
+    });
+  </script>
 </body>
 </html>

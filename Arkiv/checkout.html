@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="sv">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Checkout</title>
+        <!-- Länk till din existerande styles.css -->
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+        <header>
+            <h1 class="logo">Elm</h1>
+            <button id="cart-icon">🛒 (<span id="cart-count">0</span>)</button>
+        </header>
+
+        <a href="shop.html" class="back-button">← Tillbaka till butiken</a>
+
+        <h1>Slutför ditt köp</h1>
+
+        <main id="cart-container"></main>
+
+        <h2>Leveransuppgifter</h2>
+        <form id="checkout-form">
+            <input type="text" id="name" placeholder="Namn" required><br><br>
+            <input type="text" id="address" placeholder="Adress" required><br><br>
+            <input type="email" id="email" placeholder="E-post" required><br><br>
+            <button type="submit">Slutför köp</button>
+        </form>
+
+        <script>
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            console.log("Cart in localStorage:", cart); // Debug: se vad som finns i localStorage
+
+            function displayCart() {
+                const cartContainer = document.getElementById("cart-container");
+                cartContainer.innerHTML = "";
+                let total = 0;
+
+                if (cart.length === 0) {
+                    cartContainer.innerHTML = "<p>Din kundvagn är tom.</p>";
+                    return;
+                }
+
+                cart.forEach(item => {
+                    total += item.price * item.quantity;
+                    const cartItem = document.createElement("div");
+                    cartItem.classList.add("cart-item");
+
+                    cartItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}">
+                        <div>
+                            <h3>${item.name}</h3>
+                            <p>Pris: ${item.price} kr</p>
+                            <p>Antal: ${item.quantity}</p>
+                        </div>
+                    `;
+                    cartContainer.appendChild(cartItem);
+                });
+
+                const totalDiv = document.createElement("h3");
+                totalDiv.innerText = `Total: ${total} kr`;
+                cartContainer.appendChild(totalDiv);
+            }
+
+            document.getElementById("checkout-form").addEventListener("submit", function(event) {
+                event.preventDefault(); // Förhindra sidladdning
+
+                // Hämta inputvärden
+                const name = document.getElementById("name").value;
+                const address = document.getElementById("address").value;
+                const email = document.getElementById("email").value;
+
+                // Simulera orderbekräftelse
+                alert(`Tack för ditt köp, ${name}! En orderbekräftelse har skickats till ${email}.`);
+
+                // Töm kundvagnen
+                localStorage.removeItem("cart");
+                cart = [];
+                displayCart();
+            });
+
+            displayCart();
+        </script>
+    </body>
+</html>

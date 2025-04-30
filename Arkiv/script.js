@@ -160,29 +160,3 @@ document.querySelectorAll('.category-filter').forEach(filter => {
 
 fetchProducts();
 updateCartUI();
-
-const loginForm = document.getElementById('login-form');
-const logoutBtn = document.getElementById('logout-btn');
-const welcomeMsg = document.getElementById('welcome-msg');
-
-loginForm?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const formData = new FormData(loginForm);
-    const response = await fetch('login.php', {
-        method: 'POST',
-        body: formData
-    });
-    const result = await response.json();
-    if (result.success) {
-        loginForm.classList.add('hidden');
-        logoutBtn.classList.remove('hidden');
-        welcomeMsg.classList.remove('hidden');
-        welcomeMsg.textContent = `Välkommen, ${formData.get('username')}!`;
-    } else {
-        alert('Fel användarnamn eller lösenord');
-    }
-});
-
-logoutBtn?.addEventListener('click', () => {
-    window.location.href = 'logout.php';
-});
