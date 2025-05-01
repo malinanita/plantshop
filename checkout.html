@@ -13,19 +13,23 @@
             <button id="cart-icon">🛒 (<span id="cart-count">0</span>)</button>
         </header>
 
-        <a href="shop.html" class="back-button">← Tillbaka till butiken</a>
+        <main>
+            <a href="shop.html" class="back-button">← Fortsätt handla</a>
 
-        <h1>Slutför ditt köp</h1>
+            <h1>Slutför ditt köp</h1>
 
-        <main id="cart-container"></main>
+            
+            <article id="cart-container"></article>
+            
 
-        <h2>Leveransuppgifter</h2>
-        <form id="checkout-form">
-            <input type="text" id="name" placeholder="Namn" required><br><br>
-            <input type="text" id="address" placeholder="Adress" required><br><br>
-            <input type="email" id="email" placeholder="E-post" required><br><br>
-            <button type="submit">Slutför köp</button>
-        </form>
+            <h2>Leveransuppgifter</h2>
+            <form id="checkout-form">
+                <input type="text" id="name" placeholder="Namn" required><br><br>
+                <input type="text" id="address" placeholder="Adress" required><br><br>
+                <input type="email" id="email" placeholder="E-post" required><br><br>
+                <button type="submit">Slutför köp</button>
+            </form>
+        </main>
 
         <script>
             async function fetchCart() {

@@ -6,22 +6,24 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Min profil</h1>
+    <main>
+        <h1>Min profil</h1>
 
-  <div id="user-panel">
-    <form id="login-form">
-      <input type="email" name="email" placeholder="E-post" required>
-      <input type="password" name="password" placeholder="Lösenord" required>
-      <button type="submit">Logga in</button>
-      <p>Har inget konto? <a href="register.html">Registrera dig här</a>.</p>
-    </form>
+        <div id="user-panel">
+            <form id="login-form">
+            <input type="email" name="email" placeholder="E-post" required>
+            <input type="password" name="password" placeholder="Lösenord" required>
+            <button type="submit">Logga in</button>
+            <p>Har inget konto? <a href="register.html">Registrera dig här</a>.</p>
+            </form>
 
-    <div id="welcome-msg" style="display:none;"></div>
-    <div id="extra-links" style="display:none;">
-      <a href="order_history.php">Visa mina ordrar</a>
-    </div>
-    <button id="logout-btn" style="display:none;">Logga ut</button>
-  </div>
+            <div id="welcome-msg" style="display:none;"></div>
+            <div id="extra-links" style="display:none;">
+            <a href="order_history.php">Visa mina ordrar</a>
+            </div>
+            <button id="logout-btn" style="display:none;">Logga ut</button>
+        </div>
+    </main>
 
   <script>
     const loginForm = document.getElementById('login-form');

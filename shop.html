@@ -17,24 +17,27 @@
     <button id="cart-icon">🛒 (<span id="cart-count">0</span>)</button>
 </header>
 
-<!-- Filter för produktkategorier -->
-<section id="filters">
-    <button id="filter-toggle">Filtrera +</button>
-    <div id="filter-dropdown" class="hidden">
-        <label><input type="checkbox" class="category-filter" value="Rankande"> Rankande</label><br>
-        <label><input type="checkbox" class="category-filter" value="Lättskötta"> Lättskötta</label><br>
-        <label><input type="checkbox" class="category-filter" value="Luftrenande"> Luftrenande</label>
-    </div>
-</section>
 
 <!-- Dropdown för kundvagnen -->
 <div id="cart-dropdown" class="cart-dropdown">
     <h3>Din kundvagn</h3>
     <div id="cart-items"></div>
-    <button onclick="window.location.href='checkout.html'">Gå till kassan</button>
+    <button class="checkout-btn" onclick="window.location.href='checkout.html'">Gå till kassan</button>
 </div>
 
-<main id="products-container"></main>
+<main>
+    <section id="filters">
+      <button id="filter-toggle">Filtrera +</button>
+      <div id="filter-dropdown" class="hidden">
+        <label><input type="checkbox" class="category-filter" value="Rankande"> Rankande</label><br>
+        <label><input type="checkbox" class="category-filter" value="Lättskötta"> Lättskötta</label><br>
+        <label><input type="checkbox" class="category-filter" value="Luftrenande"> Luftrenande</label>
+      </div>
+    </section>
+  
+    <section id="product-list"></section>
+</main>
+
 <script src="script.js"></script>
 </body>
 </html>

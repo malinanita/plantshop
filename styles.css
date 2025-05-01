@@ -3,50 +3,149 @@ body {
     text-align: center; 
     margin: 0; 
     background-image: url('images/plants4.webp');
-  background-size: cover;            /* Täck hela skärmen */
-  background-position: center center;/* Centrera bilden */
-  background-repeat: no-repeat;      /* Upprepa inte */
-  background-attachment: fixed;
-}
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  }
+  
+  /* HEADER */
+  header {
+    max-width: 1000px;
+    margin: 2rem auto 0 auto;
+    padding: 1em;
+    background-color: rgba(255, 255, 255, 0.85);
+  }
+  
+  /* MAIN */
+  main {
+    background-color: rgba(255, 255, 255);
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 
-main {
+  
+  /* FILTER */
+  #filters {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1em;
+  }
+  
+  #filter-toggle {
     background-color: white;
+    color: #726838;
+    border: none;
+    padding: 8px 16px;
+    font-weight: lighter;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #filter-toggle:hover {
+    background-color: white;
+  }
+  
+  #filter-dropdown.hidden {
+    display: none;
+  }
+  
+  #filter-dropdown {
+    margin-top: 10px;
+  }
+  
+  /* PRODUKTLISTA */
+  #product-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
     gap: 1em;
-    padding: 1em;
-    max-width: 1000px; 
-    margin: 0 auto;
-}
-
-header{
-    max-width: 1000px;
-    margin: 2rem auto 0 auto;        /* Centrerar headern */
-    padding: 1em;
-    background-color: rgba(255, 255, 255, 0.85);
-}
-    
-
-article { 
-    padding: 0.5em;
-    width: calc(33.333% - 1em); /* Tre per rad med lite mellanrum */
+  }
+  
+  /* PRODUKTER */
+  #product-list article {
+    width: calc(33.333% - 1em);
     box-sizing: border-box;
-    transition: width 0.3s ease;
-}
+    padding: 1em;
+    background-color: white;
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
+  
 
-figure { 
-    margin: 0; 
-}
-
-img { 
+  .product-link {
+    text-decoration: none;
+    font: weight lighter;
+    color: inherit; /* behåller ärvd färg */
+  }
+  
+  figure {
+    margin: 0;
+  }
+  
+  img {
     width: 100%;
     height: 340px;
-    object-fit: cover; 
-    padding: none;
-}
-
-body.landing {
+    object-fit: cover;
+  }
+  
+  /* LÄGG I KUNDVAGN */
+  .add-to-cart-btn {
+    background-color: #ffbc3f; 
+    color: black; 
+    border: none;
+    padding: 0.5em 1.2em; 
+    text-align: center;
+    font-size: 12px;
+    border-radius: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; 
+  }
+  
+  .add-to-cart-btn:hover {
+    background-color: rgb(250, 167, 0); 
+    transform: scale(1.03);
+  }
+  
+  .add-to-cart-btn:focus {
+    outline: none;
+  }
+  
+  .add-to-cart-btn:active {
+    transform: scale(1);
+    background-color: rgba(201, 134, 0, 0.7);
+  }
+  
+  /* NAVIGATION */
+  .menu-link {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 8px 14px;
+    text-decoration: none;
+    color: #2e2e2e;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+  }
+  
+  .menu-link:hover {
+    background-color: #FFEBD5;
+    color: #FFA01B;
+  }
+  
+  /* LOGO */
+  .logo {
+    margin-bottom: 0.3rem;
+    font-size: 60px;
+    font-weight: lighter;
+    color: #ffb222;
+  }
+  
+  /* LANDINGPAGE (om du använder den) */
+  body.landing {
     margin: 0;
     padding: 0;
     height: 100vh;
@@ -55,104 +154,38 @@ body.landing {
     justify-content: center;
     align-items: center;
     font-family: sans-serif;
-}
+  }
   
-main.intro {
+  main.intro {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-}
+  }
   
-section.overlay {
+  section.overlay {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 3rem;
+    padding-top: 0.5em;
     text-align: left;
     max-width: 500px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.2);
-}
-  
-section.overlay .logo {
-    margin-top: 0;
-}
-  
-.proceed-btn {
-    background: none;
-    margin-top: 1.5rem;
-    padding: 0.75rem 1.5rem;
-    color: rgb(0, 0, 0);
+    height: auto;    
+    max-height: 90vh;     
+    overflow-y: auto; 
+  }
+
+  .proceed-btn {
     text-decoration: none;
-    font-weight: bold;
-    font-size: smaller;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+    color: inherit;
+  }
+
+  .proceed-btn:hover {
+    color: rgb(131, 65, 0);
+    transition: color 0.2s ease;
+
+  }
   
-.proceed-btn:hover {
-    color: #ffb222;
-}
-
-/* Stil för knappar med klassen 'add-to-cart-btn' */
-.add-to-cart-btn {
-    background-color: #ffbc3f; 
-    color: black; 
-    border: none;
-    padding: 0.5em 1.2em; 
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 12px;
-    cursor: pointer;
-    border-radius: 20px;
-    transition: background-color 0.3s, transform 0.2s; 
-}
-
-.add-to-cart-btn:hover {
-    background-color: rgb(250, 167, 0); 
-    transform: scale(1.03); /* Förstoringseffekt vid hover */
-}
-
-.add-to-cart-btn:focus {
-    outline: none; /* Tar bort fokusramen */
-}
-
-.add-to-cart-btn:active {
-    transform: scale(1); /* Förhindrar ytterligare förstoring när knappen är aktiv */
-    background-color: rgba(201, 134, 0, 0.7);
-}
-
-  
-.logo {
-    margin-bottom: 0.3rem;
-    font-size: 60px;
-    font-weight: lighter;
-    color: #ffb222;
-    
-}
-  
-.slogan {
-    margin-top: 0;
-}
-
-.menu-link {
-    display: inline-block;
-    margin: 0 10px;
-    padding: 8px 14px;
-    text-decoration: none;
-    color: #2e2e2e;
-    font-weight: 600;
-    border-radius: 8px;
-    transition: background-color 0.2s ease;
-}
-  
-.menu-link:hover {
-    background-color: #FFEBD5; /* ljusgrön bakgrund vid hover */
-    color: #FFA01B;
-}
-
-
-
-#cart-icon {
+  /* KUNDVAGN */
+  #cart-icon {
     position: fixed;
     top: 20px;
     right: 20px;
@@ -162,192 +195,140 @@ section.overlay .logo {
     padding: 10px 15px;
     cursor: pointer;
     font-size: 18px;
-}
-#cart-dropdown {
-    display: none; /* Dold initialt */
+  }
+  
+  #cart-dropdown {
+    display: none;
     position: fixed;
     top: 60px;
     right: 20px;
     width: 250px;
     background-color: white;
     border: 1px solid #ddd;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     padding: 10px;
     text-align: left;
-}
-#cart-dropdown.show {
-    display: block; /* När 'show' klassen läggs till */
-}
-.cart-item { 
-    display: flex; 
-    justify-content: space-between; 
-    padding: 5px 0; 
-}
-
-.cart-item { 
-    display: inline-block; 
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid #ddd; 
-    width: 200px; 
-}
-
-.cart-item img { 
-    width: 100px; 
-    height: 100px; 
-    object-fit: cover; 
-}
-
-
-#cart-dropdown button { 
-    width: 100%; 
-    color: black; 
-    background-color: white; 
-    border: none; 
-    padding: 10px; 
-    margin-top: 10px; 
-    cursor: pointer; 
-}
-
-/* Filter dropdown */
-.filter-dropdown {
-    display: none; /* Dold initialt */
-    margin-top: 10px;
-}
-
-#filter-dropdown.hidden {
-    display: none;
-}
-#filter-dropdown {
-    margin-top: 10px;
-}
-
-#filter-toggle {
-    margin-bottom: 10px;
-}
-
-.product-page {
-    max-width: 800px;
-    margin: 3rem auto;
-    padding: 0 1rem;
-    text-align: center;
-}
+  }
   
-.product-image-large {
-    max-width: 100%;
-    height: auto;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-}
+  #cart-dropdown.show {
+    display: block;
+  }
   
-.price {
-    font-size: 1.5rem;
-    font-weight: bold;
-}
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+  }
+
+
+  .cart-item button {
+    background-color: white;
+    color: black;
+    border: none;
+    font-size: 16px;
+    padding: 4px 8px;
+    cursor: pointer;
+  }
   
-.description {
+  .cart-item button:hover {
+    background-color: #f2f2f2;
+  }
+
+  .checkout-btn {
+    background-color: white;
+    border: none;
+    padding: 10px 16px;
+    width: 100%;
     font-size: 1rem;
-    color: #444;
-    line-height: 1.6;
-}
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .checkout-btn:hover {
+    background-color: #eaa216;
+    transform: scale(1.02);
+  }
+  
+  .checkout-btn:focus {
+    outline: none;
+  }
 
-.back-button {
-    display: inline-block;
-    margin-bottom: 1rem;
+  .back-button{
     text-decoration: none;
-    color: #4a4a4a;
-    font-weight: bold;
-    font-size: 1rem;
-}
-  
-.back-button:hover {
-    text-decoration: underline;
-}
+    color: inherit;
+  }
 
-/* Checkout-stilar */
-#cart-container {
+  .back-button:hover{
+    color: rgb(131, 65, 0);
+  }
+  
+  /* CHECKOUT */
+  #cart-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 20px;
-}
-
-.cart-item {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    width: 95%; 
-    box-sizing: border-box;
-    margin-bottom: 10px;
-}
-
-.cart-item img {
+  }
+  
+  .cart-item img {
     width: 100px;
     height: 100px;
     object-fit: cover;
     margin-right: 20px;
-}
-
-.item-details {
+  }
+  
+  .item-details {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-
-h3 {
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-form {
-    max-width: 600px;
-    margin: 0 auto;
+  }
+  
+  /* FORM */
+  form {
+    width: 75%;
     padding: 20px;
     background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-form input {
-    width: 100%;
+    box-sizing: border-box;
+    margin: 0 auto;
+  }
+  
+  form input {
+    width: 90%;
     padding: 10px;
     margin: 10px 0;
-    border-radius: 4px;
     border: 1px solid #ddd;
-}
-
-form button {
+  }
+  
+  form button {
     padding: 10px;
     background-color: #ffb222;
     color: white;
     border: none;
-    width: 100%;
+    width: 95%;
     cursor: pointer;
     font-size: 1.1rem;
-    border-radius: 4px;
-}
-
-form button:hover {
+  }
+  
+  form button:hover {
     background-color: #eaa216;
-}
+  }
 
-/* Media query för mobiler */
-@media (max-width: 1000px) {
-    article {
+  
+  /* RESPONSIV DESIGN */
+  @media (max-width: 1000px) {
+    #product-list article {
       width: 100% !important;
     }
   
     main {
-      justify-content: center; /* centrera på mobil */
       padding: 0.5em;
+      justify-content: center;
     }
-
+  
     img {
-        max-width: 80%;
-        height: 750px;
-      }
+      height: auto;
+      max-height: 500px;
+    }
   }
+  
