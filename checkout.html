@@ -28,33 +28,44 @@
         </form>
 
         <script>
-            document.getElementById("checkout-form").addEventListener("submit", async function(event) {
-    event.preventDefault();
-    const name = document.getElementById("name").value;
-    const address = document.getElementById("address").value;
-    const email = document.getElementById("email").value;
-
-    try {
-        const response = await fetch("place_order.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ cart, name, address, email })
-        });
-
-        const result = await response.json();
-        if (result.success) {
-            alert(`Tack för ditt köp! Din order-ID är ${result.order_id}.`);
-            localStorage.removeItem("cart");
-            cart = [];
+            async function fetchCart() {
+              const res = await fetch('get_cart.php');
+              const data = await res.json();
+              return data.cart;
+            }
+          
+            async function displayCart() {
+              const cart = await fetchCart();
+              const cartContainer = document.getElementById("cart-container");
+              cartContainer.innerHTML = "";
+              let total = 0;
+          
+              if (cart.length === 0) {
+                  cartContainer.innerHTML = "<p>Din kundvagn är tom.</p>";
+                  return;
+              }
+          
+              cart.forEach(item => {
+                  total += item.price * item.quantity;
+          
+                  const cartItem = document.createElement("div");
+                  cartItem.classList.add("cart-item");
+                  cartItem.innerHTML = `
+                      <img src="${item.image}" alt="${item.name}">
+                      <h3>${item.name}</h3>
+                      <p>Pris: ${item.price} kr</p>
+                      <p>Antal: ${item.quantity}</p>
+                  `;
+                  cartContainer.appendChild(cartItem);
+              });
+          
+              const totalDiv = document.createElement("h3");
+              totalDiv.innerText = `Total: ${total} kr`;
+              cartContainer.appendChild(totalDiv);
+            }
+          
             displayCart();
-        } else {
-            alert("Fel: " + result.error);
-        }
-    } catch (err) {
-        alert("Något gick fel vid beställningen.");
-        console.error(err);
-    }
-});
-        </script>
+          </script>
+          
     </body>
 </html>
