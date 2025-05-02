@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="sv">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Kontakt</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+    <body>
+
+        <header>
+            <div class="logo-container">
+              <h1 class="logo">Elm</h1>
+            </div>
+            <nav>
+              <a class="menu-link" href="shop.html">Produkter</a>
+              <a class="menu-link" href="contact.html">Kontakt</a>
+              <a class="menu-link" href="profile.html">Profil</a>
+              <button id="cart-icon">🛒 <i class="fas fa-shopping-cart"></i> <span id="cart-count">(0)</span></button>
+            </nav>
+        </header>
+
+        <div id="cart-dropdown" class="cart-dropdown">
+            <h3>Din kundvagn</h3>
+            <div id="cart-items"></div>
+            <button class="checkout-btn" onclick="window.location.href='checkout.html'">Gå till kassan</button>
+        </div>
+
+        <main>
+            <header>
+                <p class="slogan-subtext">Din grönaste växtbutik på nätet</p>
+                <hr class="slogan-line">
+            </header>
+            <h1>Kontakt</h1>
+        </main>
+    <script src="script.js"></script>
+    </body>
+</html>

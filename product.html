@@ -9,9 +9,23 @@
 </head>
 <body>
   <header>
-    <h1 class="logo">Elm</h1>
-    <button id="cart-icon">🛒 (<span id="cart-count">0</span>)</button>
-  </header>
+    <div class="logo-container">
+      <h1 class="logo">Elm</h1>
+    </div>
+    <nav>
+      <a class="menu-link" href="shop.html">Produkter</a>
+      <a class="menu-link" href="contact.html">Kontakt</a>
+      <a class="menu-link" href="profile.html">Profil</a>
+      <button id="cart-icon">🛒 <i class="fas fa-shopping-cart"></i> <span id="cart-count">(0)</span></button>
+    </nav>
+</header>
+
+<div id="cart-dropdown" class="cart-dropdown">
+  <h3>Din kundvagn</h3>
+  <div id="cart-items"></div>
+  <button class="checkout-btn" onclick="window.location.href='checkout.html'">Gå till kassan</button>
+</div>
+
   <main id="product-detail" class="product-page">
     <a href="shop.html" class="back-button">← Tillbaka till butiken</a>
     <!-- Innehållet fylls på av JavaScript -->
