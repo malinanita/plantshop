@@ -8,15 +8,17 @@
 </head>
 <body>
 
-<header>
-    <h1 class="logo">Elm</h1>
-    <nav>
-        <a href="shop.html" class="menu-link">Produkter</a>
-        <a href="profile.html" class="menu-link">Profil</a>
-    </nav>
-    <button id="cart-icon">🛒 (<span id="cart-count">0</span>)</button>
-</header>
-
+    <header>
+        <div class="logo-container">
+          <h1 class="logo">Elm</h1>
+        </div>
+        <nav>
+          <a class="menu-link" href="#">Produkter</a>
+          <a class="menu-link" href="#">Kontakt</a>
+          <a class="menu-link" href="#">Profil</a>
+          <button id="cart-icon"><i class="fas fa-shopping-cart"></i> (0)</button>
+        </nav>
+    </header>
 
 <!-- Dropdown för kundvagnen -->
 <div id="cart-dropdown" class="cart-dropdown">
@@ -26,6 +28,10 @@
 </div>
 
 <main>
+    <header>
+        <p class="slogan-subtext">Din grönaste växtbutik på nätet</p>
+        <hr class="slogan-line">
+    </header>
     <section id="filters">
       <button id="filter-toggle">Filtrera +</button>
       <div id="filter-dropdown" class="hidden">
