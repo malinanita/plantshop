@@ -7,7 +7,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $userId = $_SESSION['user_id'];
-$stmt = $pdo->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC");
+$stmt = $db->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC");
 $stmt->execute([$userId]);
 $orders = $stmt->fetchAll();
 
@@ -17,7 +17,7 @@ foreach ($orders as $order) {
     echo "<p>Totalt: {$order['total_price']} kr</p>";
 
     // Hämta produkter i denna order
-    $stmtItems = $pdo->prepare("SELECT oi.*, p.name FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = ?");
+    $stmtItems = $db->prepare("SELECT oi.*, p.name FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = ?");
     $stmtItems->execute([$order['id']]);
     $items = $stmtItems->fetchAll();
 

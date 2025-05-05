@@ -6,8 +6,8 @@ $user = 'root';
 $pass = ''; 
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $db = new PDO("mysql:host=$host;dbname=$db", $user, $pass);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo 'Connection failed: ' . $e->getMessage();
     exit;
@@ -23,7 +23,7 @@ if ($category) {
     $query .= ' WHERE category IN (' . implode(',', array_map(function($cat) { return "'" . addslashes($cat) . "'"; }, explode(',', $category))) . ')';
 }
 
-$stmt = $pdo->query($query);
+$stmt = $db->query($query);
 
 // Hämta alla resultat som en associerad array
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);

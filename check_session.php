@@ -15,7 +15,7 @@ if (isset($_SESSION['user_id'])) {
 
 // Om det finns en login-token-cookie
 if (isset($_COOKIE['login_token'])) {
-    $stmt = $pdo->prepare("SELECT id, email, name FROM users WHERE login_token = ?");
+    $stmt = $db->prepare("SELECT id, email, name FROM users WHERE login_token = ?");
     $stmt->execute([$_COOKIE['login_token']]);
     $user = $stmt->fetch();
 

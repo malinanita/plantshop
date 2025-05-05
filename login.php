@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $password = $_POST['password'] ?? '';
 
-    $stmt = $pdo->prepare("SELECT id, name, password FROM users WHERE email = ?");
+    $stmt = $db->prepare("SELECT id, name, password FROM users WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $token = bin2hex(random_bytes(32));
         setcookie('login_token', $token, time() + (30 * 24 * 60 * 60), "/");
 
-        $stmt = $pdo->prepare("UPDATE users SET login_token = ? WHERE id = ?");
+        $stmt = $db->prepare("UPDATE users SET login_token = ? WHERE id = ?");
         $stmt->execute([$token, $user['id']]);
 
         echo json_encode(['success' => true, 'email' => $email, 'name' => $user['name']]);

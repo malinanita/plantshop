@@ -1,47 +1,68 @@
 <?php
+ob_start();
 session_start();
 require 'db.php';
 
-if (!isset($_SESSION['user_id'])) {
-    http_response_code(403);
-    echo json_encode(['error' => 'Du måste vara inloggad.']);
-    exit;
-}
-
-$data = json_decode(file_get_contents('php://input'), true);
-$cart = $data['cart'];
-$name = $data['name'];
-$address = $data['address'];
-$email = $data['email'];
-$userId = $_SESSION['user_id'];
+header('Content-Type: application/json');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 try {
-    $pdo->beginTransaction();
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
 
-    // Räkna ut totalpris
+    if (!isset($_SESSION['user_id'])) {
+        throw new Exception("Du måste vara inloggad för att beställa.");
+    }
+
+    if (!$data || !isset($data['name'], $data['address'], $data['email'])) {
+        throw new Exception("Felaktig eller ofullständig data mottagen.");
+    }
+
+    $cart = $_SESSION['cart'] ?? [];
+    if (empty($cart)) {
+        throw new Exception("Din kundvagn är tom.");
+    }
+
+    // 🧮 Beräkna totalpris
     $total = 0;
     foreach ($cart as $item) {
+        if (!isset($item['price'], $item['quantity'])) {
+            throw new Exception("Kundvagnen innehåller ogiltiga värden.");
+        }
         $total += $item['price'] * $item['quantity'];
     }
 
-    // Skapa order
-    $stmt = $pdo->prepare("INSERT INTO orders (user_id, total_price, delivery_name, delivery_address, delivery_email, created_at)
-        VALUES (?, ?, ?, ?, ?, NOW())");
-    $stmt->execute([$userId, $total, $name, $address, $email]);
-    $orderId = $pdo->lastInsertId();
+    $db->beginTransaction();
 
-    // Skapa order_items
-    $stmtItem = $pdo->prepare("INSERT INTO order_items (order_id, product_id, quantity, price)
-        VALUES (?, ?, ?, ?)");
+    // 📝 Spara order
+    $stmt = $db->prepare("INSERT INTO orders (user_id, total_price, status, created_at) VALUES (?, ?, ?, NOW())");
+    $stmt->execute([$_SESSION['user_id'], $total, 'bekräftad']);
+    $order_id = $db->lastInsertId();
+
+    // 🧾 Spara varje produkt i order_items
+    $itemStmt = $db->prepare("INSERT INTO order_items (order_id, product_id, quantity, price_at_purchase) VALUES (?, ?, ?, ?)");
 
     foreach ($cart as $item) {
-        $stmtItem->execute([$orderId, $item['id'], $item['quantity'], $item['price']]);
+        $itemStmt->execute([
+            $order_id,
+            $item['id'],
+            $item['quantity'],
+            $item['price']
+        ]);
     }
 
-    $pdo->commit();
+    $db->commit();
+    $_SESSION['cart'] = [];
 
-    echo json_encode(['success' => true, 'order_id' => $orderId]);
+    ob_end_clean();
+    echo json_encode(['success' => true, 'order_id' => $order_id]);
 } catch (Exception $e) {
-    $pdo->rollBack();
-    echo json_encode(['error' => 'Något gick fel: ' . $e->getMessage()]);
+    if ($db && $db->inTransaction()) {
+        $db->rollBack();
+    }
+    ob_end_clean();
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
+?>
