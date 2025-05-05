@@ -2,6 +2,8 @@
 // Produkter och kundvagn
 // ==========================
 
+let orderJustPlaced = false;
+
 async function fetchProducts(category = "") {
     const container = document.getElementById("product-list");
     if (!container) return;
@@ -79,6 +81,7 @@ async function fetchProducts(category = "") {
   }
   
   async function updateCartUI() {
+    if (orderJustPlaced) return;
     const cartContainer = document.getElementById("cart-items");
     const cartCount = document.getElementById("cart-count");
     if (!cartContainer || !cartCount) return;
@@ -133,6 +136,7 @@ async function fetchProducts(category = "") {
     if (filterDropdown) filterDropdown.classList.toggle("hidden");
   }
   
+
   // ==========================
   // DOM Ready
   // ==========================
@@ -334,49 +338,42 @@ async function fetchProducts(category = "") {
     const cartContainer = document.getElementById("cart-container");
 
     if (checkoutForm && cartContainer) {
-    // Hämta och visa kundvagn
-    async function fetchCart() {
-        const res = await fetch("get_cart.php");
-        const data = await res.json();
-        return data.cart;
-    }
+    
+        async function displayCart() {
+            if (orderJustPlaced) return;
 
-    async function displayCart() {
-        const cart = await fetchCart();
-        cartContainer.innerHTML = "";
-        let total = 0;
+            const cart = await fetchCart();
+            cartContainer.innerHTML = "";
+            let total = 0;
 
-        if (cart.length === 0) {
-        const empty = document.createElement("p");
-        empty.textContent = "Din kundvagn är tom.";
-        cartContainer.appendChild(empty);
-        return;
-        }
+            if (cart.length === 0) {
+            return; // Visa inget om kundvagnen är tom på checkout
+            }
 
-        cart.forEach(item => {
-        total += item.price * item.quantity;
+            cart.forEach(item => {
+            total += item.price * item.quantity;
 
-        const cartItem = document.createElement("div");
-        cartItem.classList.add("cart-item");
+            const cartItem = document.createElement("div");
+            cartItem.classList.add("cart-item");
 
-        const img = document.createElement("img");
-        img.src = item.image;
-        img.alt = item.name;
+            const img = document.createElement("img");
+            img.src = item.image;
+            img.alt = item.name;
 
-        const title = document.createElement("h3");
-        title.textContent = item.name;
+            const title = document.createElement("h3");
+            title.textContent = item.name;
 
-        const price = document.createElement("p");
-        price.textContent = `Pris: ${item.price} kr`;
+            const price = document.createElement("p");
+            price.textContent = `Pris: ${item.price} kr`;
 
-        const qty = document.createElement("p");
-        qty.textContent = `Antal: ${item.quantity}`;
+            const qty = document.createElement("p");
+            qty.textContent = `Antal: ${item.quantity}`;
 
-        cartItem.appendChild(img);
-        cartItem.appendChild(title);
-        cartItem.appendChild(price);
-        cartItem.appendChild(qty);
-        cartContainer.appendChild(cartItem);
+            cartItem.appendChild(img);
+            cartItem.appendChild(title);
+            cartItem.appendChild(price);
+            cartItem.appendChild(qty);
+            cartContainer.appendChild(cartItem);
         });
 
         const totalDiv = document.createElement("h3");
@@ -389,6 +386,8 @@ async function fetchProducts(category = "") {
     // Hantera formulär
     checkoutForm.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        orderJustPlaced = true;
 
         const name = document.getElementById("name").value;
         const address = document.getElementById("address").value;
@@ -416,8 +415,10 @@ async function fetchProducts(category = "") {
         }
 
         if (result.success) {
+            orderJustPlaced = true;
             alert("Tack! Din order har lagts.");
             window.location.href = "profile.html";
+            return;
         } else {
             alert("Fel: " + result.message);
         }
@@ -427,5 +428,6 @@ async function fetchProducts(category = "") {
         }
     });
     }
+
   });
   
