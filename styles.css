@@ -348,6 +348,16 @@ body {
   form button:hover {
     background-color: #eaa216;
   }
+
+  .hidden {
+    display: none;
+  }
+  
+  #logout-section {
+    margin-top: 3em;
+    text-align: center;
+  }
+  
   
   /* RESPONSIV DESIGN */
   @media (max-width: 1000px) {

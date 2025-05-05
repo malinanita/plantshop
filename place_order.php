@@ -25,7 +25,7 @@ try {
         throw new Exception("Din kundvagn är tom.");
     }
 
-    // 🧮 Beräkna totalpris
+    // Beräkna totalpris
     $total = 0;
     foreach ($cart as $item) {
         if (!isset($item['price'], $item['quantity'])) {
@@ -36,12 +36,12 @@ try {
 
     $db->beginTransaction();
 
-    // 📝 Spara order
+    // Spara order
     $stmt = $db->prepare("INSERT INTO orders (user_id, total_price, status, created_at) VALUES (?, ?, ?, NOW())");
     $stmt->execute([$_SESSION['user_id'], $total, 'bekräftad']);
     $order_id = $db->lastInsertId();
 
-    // 🧾 Spara varje produkt i order_items
+    // Spara varje produkt i order_items
     $itemStmt = $db->prepare("INSERT INTO order_items (order_id, product_id, quantity, price_at_purchase) VALUES (?, ?, ?, ?)");
 
     foreach ($cart as $item) {

@@ -6,65 +6,90 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <header>
+    <h1 class="logo">Elm</h1>
+    <nav>
+      <a class="menu-link" href="shop.html">Produkter</a>
+      <a class="menu-link" href="contact.html">Kontakt</a>
+      <a class="menu-link" href="profile.html">Profil</a>
+      <button id="cart-icon">🛒 <i class="fas fa-shopping-cart"></i> <span id="cart-count">(0)</span></button>
+    </nav>
+  </header>
+
+  <section id="cart-dropdown" class="cart-dropdown">
+    <h3>Din kundvagn</h3>
+    <div id="cart-items"></div>
+    <button class="checkout-btn" onclick="window.location.href='checkout.html'">Gå till kassan</button>
+  </section>
+
+  <main>
     <header>
-        <div class="logo-container">
-          <h1 class="logo">Elm</h1>
-        </div>
-        <nav>
-          <a class="menu-link" href="shop.html">Produkter</a>
-          <a class="menu-link" href="contact.html">Kontakt</a>
-          <a class="menu-link" href="profile.html">Profil</a>
-          <button id="cart-icon">🛒 <i class="fas fa-shopping-cart"></i> <span id="cart-count">(0)</span></button>
-        </nav>
+      <p class="slogan-subtext">Din grönaste växtbutik på nätet</p>
+      <hr class="slogan-line">
     </header>
 
-    <div id="cart-dropdown" class="cart-dropdown">
-        <h3>Din kundvagn</h3>
-        <div id="cart-items"></div>
-        <button class="checkout-btn" onclick="window.location.href='checkout.html'">Gå till kassan</button>
-    </div>
+    <h1>Min profil</h1>
 
-    <main>
-        <header>
-            <p class="slogan-subtext">Din grönaste växtbutik på nätet</p>
-            <hr class="slogan-line">
-        </header>
+    <section id="user-panel">
+      <form id="login-form">
+        <input type="email" name="email" placeholder="E-post" required>
+        <input type="password" name="password" placeholder="Lösenord" required>
+        <button type="submit">Logga in</button>
+        <p>Har du inget konto? <a href="register.html">Registrera dig här</a>.</p>
+      </form>
+      <p id="welcome-msg" class="hidden"></p>
+    </section>
 
-        <h1>Min profil</h1>
+    <section id="order-history-section" class="hidden">
+      <h2>Mina tidigare ordrar</h2>
+      <ul id="order-list"></ul>
+    </section>
 
-        <div id="user-panel">
-            <form id="login-form">
-            <input type="email" name="email" placeholder="E-post" required>
-            <input type="password" name="password" placeholder="Lösenord" required>
-            <button type="submit">Logga in</button>
-            <p>Har inget konto? <a href="register.html">Registrera dig här</a>.</p>
-            </form>
-
-            <div id="welcome-msg" style="display:none;"></div>
-            <div id="extra-links" style="display:none;">
-            <a href="order_history.php">Visa mina ordrar</a>
-            </div>
-            <button id="logout-btn" style="display:none;">Logga ut</button>
-        </div>
-    </main>
+    <section id="logout-section" class="hidden">
+      <button id="logout-btn">Logga ut</button>
+    </section>
+  </main>
 
   <script>
     const loginForm = document.getElementById('login-form');
     const logoutBtn = document.getElementById('logout-btn');
+    const logoutSection = document.getElementById('logout-section');
     const welcomeMsg = document.getElementById('welcome-msg');
-    const extraLinks = document.getElementById('extra-links');
+    const orderHistorySection = document.getElementById('order-history-section');
 
-    // Kolla om redan inloggad (via session eller cookie)
+    async function loadOrderHistory() {
+      const res = await fetch('orders.php');
+      const data = await res.json();
+
+      if (data.success) {
+        orderHistorySection.classList.remove("hidden");
+        const list = document.getElementById("order-list");
+        list.innerHTML = "";
+
+        if (data.orders.length === 0) {
+          list.innerHTML = "<li>Du har inga tidigare ordrar.</li>";
+          return;
+        }
+
+        data.orders.forEach(order => {
+          const li = document.createElement("li");
+          const date = new Date(order.created_at).toLocaleDateString("sv-SE");
+          li.textContent = `🧾 Order #${order.order_id} – ${date} – ${order.item_count} produkter – Totalt: ${order.total_price} kr`;
+          list.appendChild(li);
+        });
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', async () => {
       const res = await fetch('check_session.php');
       const data = await res.json();
 
       if (data.loggedIn) {
-        loginForm.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-        welcomeMsg.style.display = 'block';
+        loginForm.classList.add("hidden");
+        welcomeMsg.classList.remove("hidden");
         welcomeMsg.textContent = `Välkommen, ${data.name || data.email}!`;
-        extraLinks.style.display = 'block';
+        logoutSection.classList.remove("hidden");
+        loadOrderHistory();
       }
     });
 
@@ -79,11 +104,11 @@
 
       const result = await response.json();
       if (result.success) {
-        loginForm.style.display = 'none';
-        logoutBtn.style.display = 'inline-block';
-        welcomeMsg.style.display = 'block';
+        loginForm.classList.add("hidden");
+        welcomeMsg.classList.remove("hidden");
         welcomeMsg.textContent = `Välkommen, ${result.name || result.email}!`;
-        extraLinks.style.display = 'block';
+        logoutSection.classList.remove("hidden");
+        loadOrderHistory();
       } else {
         alert('Fel e-post eller lösenord.');
       }

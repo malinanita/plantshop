@@ -2,29 +2,24 @@
 session_start();
 require 'db.php';
 
+header('Content-Type: application/json');
+
 if (!isset($_SESSION['user_id'])) {
-    die("Du måste vara inloggad.");
+    echo json_encode(['success' => false, 'message' => 'Ej inloggad']);
+    exit;
 }
 
-$userId = $_SESSION['user_id'];
-$stmt = $db->prepare("SELECT * FROM orders WHERE user_id = ? ORDER BY created_at DESC");
-$stmt->execute([$userId]);
-$orders = $stmt->fetchAll();
+try {
+    $stmt = $db->prepare("SELECT o.id AS order_id, o.created_at, o.total_price, COUNT(oi.id) AS item_count
+                          FROM orders o
+                          JOIN order_items oi ON o.id = oi.order_id
+                          WHERE o.user_id = ?
+                          GROUP BY o.id
+                          ORDER BY o.created_at DESC");
+    $stmt->execute([$_SESSION['user_id']]);
+    $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-echo "<h1>Dina ordrar</h1>";
-foreach ($orders as $order) {
-    echo "<h3>Order #{$order['id']} – {$order['created_at']}</h3>";
-    echo "<p>Totalt: {$order['total_price']} kr</p>";
-
-    // Hämta produkter i denna order
-    $stmtItems = $db->prepare("SELECT oi.*, p.name FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = ?");
-    $stmtItems->execute([$order['id']]);
-    $items = $stmtItems->fetchAll();
-
-    echo "<ul>";
-    foreach ($items as $item) {
-        echo "<li>{$item['name']} – {$item['quantity']} st á {$item['price']} kr</li>";
-    }
-    echo "</ul>";
+    echo json_encode(['success' => true, 'orders' => $orders]);
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
 }
-?>
