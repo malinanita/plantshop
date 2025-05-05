@@ -152,3 +152,100 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("product-list")) fetchProducts();  // Ladda produkter endast på butikssidan
     updateCartUI();  // Gäller alla sidor med kundvagn
 });
+
+const loginForm = document.getElementById('login-form');
+const logoutBtn = document.getElementById('logout-btn');
+const logoutSection = document.getElementById('logout-section');
+const welcomeMsg = document.getElementById('welcome-msg');
+const orderHistorySection = document.getElementById('order-history-section');
+const closeModalBtn = document.getElementById("close-modal");
+
+// Stäng modalen
+closeModalBtn.addEventListener("click", () => {
+  document.getElementById("order-modal").classList.add("hidden");
+});
+
+async function loadOrderHistory() {
+  const res = await fetch('orders.php');
+  const data = await res.json();
+
+  if (data.success) {
+    orderHistorySection.classList.remove("hidden");
+    const list = document.getElementById("order-list");
+    list.innerHTML = "";
+
+    if (data.orders.length === 0) {
+      list.innerHTML = "<li>Du har inga tidigare ordrar.</li>";
+      return;
+    }
+
+    data.orders.forEach(order => {
+      const li = document.createElement("li");
+      const date = new Date(order.created_at).toLocaleDateString("sv-SE");
+      li.textContent = `🧾 Order #${order.order_id} – ${date} – ${order.item_count} produkter – Totalt: ${order.total_price} kr`;
+      li.style.cursor = "pointer";
+      li.addEventListener("click", () => {
+        fetch(`order_details.php?order_id=${order.order_id}`)
+          .then(res => res.json())
+          .then(detail => {
+            if (detail.success) {
+              document.getElementById("order-details").textContent = formatOrderDetails(detail);
+              document.getElementById("order-modal").classList.remove("hidden");
+            } else {
+              alert("Kunde inte hämta orderdetaljer: " + detail.message);
+            }
+          });
+      });
+      list.appendChild(li);
+    });
+  }
+}
+
+function formatOrderDetails(detail) {
+  const items = detail.items.map(i =>
+    `– ${i.name}, ${i.quantity} st á ${i.price_at_purchase} kr`
+  ).join('\n');
+
+  const date = new Date(detail.order.created_at).toLocaleDateString("sv-SE");
+  const total = detail.order.total_price;
+
+  return `📦 Order #${detail.order.id}\nDatum: ${date}\n\n${items}\n\nTotalt: ${total} kr`;
+}
+
+window.addEventListener('DOMContentLoaded', async () => {
+  const res = await fetch('check_session.php');
+  const data = await res.json();
+
+  if (data.loggedIn) {
+    loginForm.classList.add("hidden");
+    welcomeMsg.classList.remove("hidden");
+    welcomeMsg.textContent = `Välkommen, ${data.name || data.email}!`;
+    logoutSection.classList.remove("hidden");
+    loadOrderHistory();
+  }
+});
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(loginForm);
+
+  const response = await fetch('login.php', {
+    method: 'POST',
+    body: formData
+  });
+
+  const result = await response.json();
+  if (result.success) {
+    loginForm.classList.add("hidden");
+    welcomeMsg.classList.remove("hidden");
+    welcomeMsg.textContent = `Välkommen, ${result.name || result.email}!`;
+    logoutSection.classList.remove("hidden");
+    loadOrderHistory();
+  } else {
+    alert('Fel e-post eller lösenord.');
+  }
+});
+
+logoutBtn.addEventListener('click', () => {
+  fetch('logout.php').then(() => location.reload());
+});

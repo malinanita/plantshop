@@ -4,7 +4,7 @@ require 'db.php';
 
 // Rensa token i databasen om användaren finns
 if (isset($_SESSION['user_id'])) {
-    $stmt = $pdo->prepare("UPDATE users SET login_token = NULL WHERE id = ?");
+    $stmt = $db->prepare("UPDATE users SET login_token = NULL WHERE id = ?");
     $stmt->execute([$_SESSION['user_id']]);
 }
 

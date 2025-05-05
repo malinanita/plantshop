@@ -12,7 +12,7 @@
       <a class="menu-link" href="shop.html">Produkter</a>
       <a class="menu-link" href="contact.html">Kontakt</a>
       <a class="menu-link" href="profile.html">Profil</a>
-      <button id="cart-icon">🛒 <i class="fas fa-shopping-cart"></i> <span id="cart-count">(0)</span></button>
+      <button id="cart-icon">🛒 <span id="cart-count">(0)</span></button>
     </nav>
   </header>
 
@@ -35,8 +35,9 @@
         <input type="email" name="email" placeholder="E-post" required>
         <input type="password" name="password" placeholder="Lösenord" required>
         <button type="submit">Logga in</button>
-        <p>Har du inget konto? <a href="register.html">Registrera dig här</a>.</p>
+        <p>Har inget konto? <a href="register.html">Registrera dig här</a>.</p>
       </form>
+
       <p id="welcome-msg" class="hidden"></p>
     </section>
 
@@ -48,76 +49,16 @@
     <section id="logout-section" class="hidden">
       <button id="logout-btn">Logga ut</button>
     </section>
+
+    <!-- Modal för orderdetaljer -->
+    <section id="order-modal" class="modal hidden">
+      <div class="modal-content">
+        <button class="close-btn" id="close-modal">&times;</button>
+        <h3>Orderdetaljer</h3>
+        <pre id="order-details"></pre>
+      </div>
+    </section>
   </main>
-
-  <script>
-    const loginForm = document.getElementById('login-form');
-    const logoutBtn = document.getElementById('logout-btn');
-    const logoutSection = document.getElementById('logout-section');
-    const welcomeMsg = document.getElementById('welcome-msg');
-    const orderHistorySection = document.getElementById('order-history-section');
-
-    async function loadOrderHistory() {
-      const res = await fetch('orders.php');
-      const data = await res.json();
-
-      if (data.success) {
-        orderHistorySection.classList.remove("hidden");
-        const list = document.getElementById("order-list");
-        list.innerHTML = "";
-
-        if (data.orders.length === 0) {
-          list.innerHTML = "<li>Du har inga tidigare ordrar.</li>";
-          return;
-        }
-
-        data.orders.forEach(order => {
-          const li = document.createElement("li");
-          const date = new Date(order.created_at).toLocaleDateString("sv-SE");
-          li.textContent = `🧾 Order #${order.order_id} – ${date} – ${order.item_count} produkter – Totalt: ${order.total_price} kr`;
-          list.appendChild(li);
-        });
-      }
-    }
-
-    window.addEventListener('DOMContentLoaded', async () => {
-      const res = await fetch('check_session.php');
-      const data = await res.json();
-
-      if (data.loggedIn) {
-        loginForm.classList.add("hidden");
-        welcomeMsg.classList.remove("hidden");
-        welcomeMsg.textContent = `Välkommen, ${data.name || data.email}!`;
-        logoutSection.classList.remove("hidden");
-        loadOrderHistory();
-      }
-    });
-
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const formData = new FormData(loginForm);
-
-      const response = await fetch('login.php', {
-        method: 'POST',
-        body: formData
-      });
-
-      const result = await response.json();
-      if (result.success) {
-        loginForm.classList.add("hidden");
-        welcomeMsg.classList.remove("hidden");
-        welcomeMsg.textContent = `Välkommen, ${result.name || result.email}!`;
-        logoutSection.classList.remove("hidden");
-        loadOrderHistory();
-      } else {
-        alert('Fel e-post eller lösenord.');
-      }
-    });
-
-    logoutBtn.addEventListener('click', () => {
-      fetch('logout.php').then(() => location.reload());
-    });
-  </script>
   <script src="script.js"></script>
 </body>
 </html>
