@@ -17,7 +17,7 @@ try {
 $category = isset($_GET['category']) ? $_GET['category'] : ''; // Hämtar kategori från GET-parametern
 
 // Skapa SQL-frågan
-$query = 'SELECT id, name, description, price, image_url, category FROM products ORDER BY (id = 2), id';
+$query = 'SELECT id, name, description, price, image_url, category FROM products';
 if ($category) {
     // Om kategori är angiven, lägg till filter i frågan
     $query .= ' WHERE category IN (' . implode(',', array_map(function($cat) { return "'" . addslashes($cat) . "'"; }, explode(',', $category))) . ')';
