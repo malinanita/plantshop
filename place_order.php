@@ -88,20 +88,20 @@ try {
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
-        $mail->setFrom('dinmejladress@gmail.com', 'Elm Växtbutik');
+        $mail->setFrom('malinanitae@gmail.com', 'Elm Växtbutik');
         $mail->addAddress($email, $name);
 
         $mail->CharSet = 'UTF-8';
         $mail->isHTML(true);
         $mail->Subject = 'Tack för din beställning hos Elm 🌿';
         $mail->Body    = "
-            <h2>Hej $name!</h2>
+            <h2>Hej $name! 💛🌿</h2>
             <p>Tack för att du beställde från Elm – din grönaste växtbutik på nätet!</p>
             <p>Vi har mottagit din order den " . date("Y-m-d H:i") . ".</p>
             <p><strong>Totalt:</strong> $total kr</p>
             <p>Vi uppdaterar dig när din order har skickats!</p>
             <br>
-            <p>🌱 Varma hälsningar,<br><strong>Elm-teamet</strong></p>
+            <p>Varma hälsningar,<br><strong>Elm-teamet</strong></p>
         ";
         $mail->AltBody = "Hej $name!\n\nTack för din beställning på $total kr.\nVi har mottagit din order den " . date("Y-m-d H:i") . ".\n\n/ Elm-teamet";
 

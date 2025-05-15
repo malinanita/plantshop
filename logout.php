@@ -1,14 +1,16 @@
 <?php
 session_start();
-require 'db.php';
+$_SESSION = [];
+session_unset();
+session_destroy();
 
-// Rensa token i databasen om användaren finns
-if (isset($_SESSION['user_id'])) {
-    $stmt = $db->prepare("UPDATE users SET login_token = NULL WHERE id = ?");
-    $stmt->execute([$_SESSION['user_id']]);
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
 }
 
-// Rensa session + cookie
-session_destroy();
-setcookie('login_token', '', time() - 3600, "/");
-http_response_code(200);
+header("Location: login.html"); // eller index.html eller vad du vill
+exit();

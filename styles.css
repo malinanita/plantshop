@@ -162,13 +162,41 @@ body {
   .btn:hover {
     background-color: rgb(250, 167, 0); 
     transform: scale(1.03);
-  }
+  } 
   
   .btn:focus {
     outline: none;
   }
   
   .btn:active {
+    transform: scale(1);
+    background-color: rgba(201, 134, 0, 0.7);
+  }
+
+  .logout-btn {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background-color: #ffbc3f; 
+    text-decoration: none;
+    color: black; 
+    border: none;
+    padding: 0.5em 1.2em; 
+    text-align: center;
+    font-size: 11px;
+    border-radius: 13px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; 
+  }
+  
+  .logout-btn:hover {
+    background-color: rgb(250, 167, 0); 
+    transform: scale(1.03);
+  } 
+  
+  .logout-btn:focus {
+    outline: none;
+  }
+  
+  .logout-btn:active {
     transform: scale(1);
     background-color: rgba(201, 134, 0, 0.7);
   }

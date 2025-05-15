@@ -158,7 +158,6 @@ async function fetchProducts(category = "") {
     // Profil – login/logout
     // ======================
     const loginForm = document.getElementById('login-form');
-    const logoutBtn = document.getElementById('logout-btn');
     const logoutSection = document.getElementById('logout-section');
     const welcomeMsg = document.getElementById('welcome-msg');
     const orderHistorySection = document.getElementById('order-history-section');
@@ -190,12 +189,6 @@ async function fetchProducts(category = "") {
         } else {
           alert('Fel e-post eller lösenord.');
         }
-      });
-    }
-  
-    if (logoutBtn) {
-      logoutBtn.addEventListener('click', () => {
-        fetch('logout.php').then(() => location.reload());
       });
     }
   
@@ -416,7 +409,7 @@ async function fetchProducts(category = "") {
 
         if (result.success) {
             orderJustPlaced = true;
-            alert("Tack! Din order har lagts.");
+            alert("Tack för ditt köp! 💛🌿 En orderbekräftelse skickas nu till din mail.");
             window.location.href = "profile.html";
             return;
         } else {
