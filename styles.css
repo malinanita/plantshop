@@ -141,6 +141,10 @@ body {
     font-weight: lighter;
     color: inherit;
   }
+
+  .product-image-large {
+    max-width: 30%;
+  }
   
   figure {
     margin: 0;
