@@ -32,11 +32,18 @@
     <hr class="slogan-line" />
 
     <section id="filters">
-      <button id="filter-toggle">Filtrera +</button>
+      <button type="button" id="filter-toggle">Filtrera +</button>
+    
       <section id="filter-dropdown" class="hidden">
-        <label><input type="checkbox" class="category-filter" value="Rankande" /> Rankande</label><br />
-        <label><input type="checkbox" class="category-filter" value="Lättskötta" /> Lättskötta</label><br />
-        <label><input type="checkbox" class="category-filter" value="Luftrenande" /> Luftrenande</label>
+        <form method="get" action="shop.php">
+          <fieldset>
+            <legend>Filtrera efter kategori</legend>
+            <label><input type="checkbox" name="category[]" value="Rankande" {{checked-rankande}}> Rankande</label><br />
+            <label><input type="checkbox" name="category[]" value="Lättskötta" {{checked-lattskotta}}> Lättskötta</label><br />
+            <label><input type="checkbox" name="category[]" value="Luftrenande" {{checked-luftrenande}}> Luftrenande</label><br />
+            <button type="submit">Filtrera</button>
+          </fieldset>
+        </form>
       </section>
     </section>
 
