@@ -1,50 +1,50 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Växtbutik</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Växtbutik</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400&display=swap" rel="stylesheet" />
 
-    <header>
-        <h1 class="logo">Elm</h1>
-        <nav>
-          <a class="link-on-page" href="shop.html">Produkter</a>
-          <a class="menu-link" href="contact.html">Kontakt</a>
-          <a class="menu-link" href="profile.html">Profil</a>
-          <button id="cart-icon" class="menu-link">🛒 <span id="cart-count">(0)</span></button>
-        </nav>
-    </header>
+  <header>
+    <h1 class="logo">Elm</h1>
+    <nav>
+      <a class="link-on-page" href="shop.php">Produkter</a>
+      <a class="menu-link" href="contact.html">Kontakt</a>
+      <a class="menu-link" href="profile.html">Profil</a>
+      <button id="cart-icon" class="menu-link">🛒 <span id="cart-count">(0)</span></button>
+    </nav>
+  </header>
 
-<!-- Dropdown för kundvagnen -->
-<div id="cart-dropdown" class="cart-dropdown">
+  <section id="cart-dropdown" class="cart-dropdown">
     <h3>Din kundvagn</h3>
-    <div id="cart-items"></div>
+    <section id="cart-items"></section>
     <button class="checkout-btn" onclick="window.location.href='checkout.html'">Gå till kassan</button>
-</div>
+  </section>
 
-<main>
-    
+  <main>
     <p class="slogan-subtext">Din grönaste växtbutik på nätet</p>
-    <hr class="slogan-line">
-    
+    <hr class="slogan-line" />
+
     <section id="filters">
       <button id="filter-toggle">Filtrera +</button>
-      <div id="filter-dropdown" class="hidden">
-        <label><input type="checkbox" class="category-filter" value="Rankande"> Rankande</label><br>
-        <label><input type="checkbox" class="category-filter" value="Lättskötta"> Lättskötta</label><br>
-        <label><input type="checkbox" class="category-filter" value="Luftrenande"> Luftrenande</label>
-      </div>
+      <section id="filter-dropdown" class="hidden">
+        <label><input type="checkbox" class="category-filter" value="Rankande" /> Rankande</label><br />
+        <label><input type="checkbox" class="category-filter" value="Lättskötta" /> Lättskötta</label><br />
+        <label><input type="checkbox" class="category-filter" value="Luftrenande" /> Luftrenande</label>
+      </section>
     </section>
-  
-    <section id="product-list"></section>
-</main>
 
-<script src="script.js"></script>
+    <section id="product-list">
+      {{product-list}}
+    </section>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>

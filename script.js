@@ -4,52 +4,6 @@
 
 let orderJustPlaced = false;
 
-async function fetchProducts(category = "") {
-    const container = document.getElementById("product-list");
-    if (!container) return;
-  
-    try {
-      const response = await fetch(`get_products.php?category=${category}`);
-      const products = await response.json();
-      container.innerHTML = "";
-  
-      products.forEach((product) => {
-        const article = document.createElement("article");
-        const figure = document.createElement("figure");
-        const img = document.createElement("img");
-        img.src = product.image_url;
-        img.alt = product.name;
-        img.style.cursor = "pointer";
-        img.onclick = () => (window.location.href = `product.html?id=${product.id}`);
-        figure.appendChild(img);
-  
-        const h3 = document.createElement("h3");
-        const a = document.createElement("a");
-        a.href = `product.html?id=${product.id}`;
-        a.textContent = product.name;
-        a.classList.add("product-link");
-        h3.appendChild(a);
-  
-        const pPrice = document.createElement("p");
-        const strong = document.createElement("strong");
-        strong.textContent = `${product.price} kr`;
-        pPrice.appendChild(strong);
-  
-        const button = document.createElement("button");
-        button.textContent = "Lägg i kundvagn";
-        button.classList.add("btn");
-        button.onclick = () => addToCart(product.id, product.name, product.image_url, product.price);
-  
-        article.appendChild(figure);
-        article.appendChild(h3);
-        article.appendChild(pPrice);
-        article.appendChild(button);
-        container.appendChild(article);
-      });
-    } catch (error) {
-      console.error("Fel vid hämtning av produkter:", error);
-    }
-  }
   
   async function addToCart(id, name, image, price) {
     await fetch("add_to_cart.php", {
@@ -118,13 +72,6 @@ async function fetchProducts(category = "") {
   // Filtrering
   // ==========================
   
-  function applyFilter() {
-    const selectedCategories = Array.from(document.querySelectorAll(".category-filter:checked")).map(
-      (input) => input.value
-    );
-    const category = selectedCategories.length > 0 ? selectedCategories.join(",") : "";
-    fetchProducts(category);
-  }
   
   function toggleCart() {
     const cartDropdown = document.getElementById("cart-dropdown");
@@ -145,13 +92,10 @@ async function fetchProducts(category = "") {
     // Allmänt
     const cartIcon = document.getElementById("cart-icon");
     const filterToggle = document.getElementById("filter-toggle");
-    const categoryFilters = document.querySelectorAll(".category-filter");
   
     if (cartIcon) cartIcon.addEventListener("click", toggleCart);
     if (filterToggle) filterToggle.addEventListener("click", toggleFilterDropdown);
-    categoryFilters.forEach((filter) => filter.addEventListener("change", applyFilter));
   
-    if (document.getElementById("product-list")) fetchProducts();
     updateCartUI();
   
     // ======================
