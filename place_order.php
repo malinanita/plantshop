@@ -1,8 +1,6 @@
 <?php
-ob_start();
 session_start();
 require 'db.php';
-
 require 'phpmailer/PHPMailer.php';
 require 'phpmailer/SMTP.php';
 require 'phpmailer/Exception.php';
@@ -10,37 +8,34 @@ require 'phpmailer/Exception.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-header('Content-Type: application/json');
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// Måste vara inloggad
+if (!isset($_SESSION['user_id'])) {
+    header("Location: checkout.php?error=login");
+    exit;
+}
+
+// Läs POST-data (vanligt formulär)
+$name = $_POST['name'] ?? '';
+$address = $_POST['address'] ?? '';
+$email = $_POST['email'] ?? '';
+
+// Validering
+if (!$name || !$address || !$email) {
+    header("Location: checkout.php?error=missing");
+    exit;
+}
+
+$cart = $_SESSION['cart'] ?? [];
+if (empty($cart)) {
+    header("Location: checkout.php?error=empty");
+    exit;
+}
 
 try {
-    $input = file_get_contents('php://input');
-    $data = json_decode($input, true);
-
-    if (!isset($_SESSION['user_id'])) {
-        throw new Exception("Du måste vara inloggad för att beställa.");
-    }
-
-    if (!$data || !isset($data['name'], $data['address'], $data['email'])) {
-        throw new Exception("Felaktig eller ofullständig data mottagen.");
-    }
-
-    $name = $data['name'];
-    $address = $data['address'];
-    $email = $data['email'];
-
-    $cart = $_SESSION['cart'] ?? [];
-    if (empty($cart)) {
-        throw new Exception("Din kundvagn är tom.");
-    }
-
-    // Beräkna totalpris
     $total = 0;
     foreach ($cart as $item) {
         if (!isset($item['price'], $item['quantity'])) {
-            throw new Exception("Kundvagnen innehåller ogiltiga värden.");
+            throw new Exception("Ogiltiga värden i kundvagnen.");
         }
         $total += $item['price'] * $item['quantity'];
     }
@@ -60,10 +55,9 @@ try {
     ]);
     $order_id = $db->lastInsertId();
 
-    // Spara varje produkt i order_items
+    // Spara varje produkt
     $itemStmt = $db->prepare("INSERT INTO order_items (order_id, product_id, quantity, price_at_purchase) 
                               VALUES (?, ?, ?, ?)");
-
     foreach ($cart as $item) {
         $itemStmt->execute([
             $order_id,
@@ -76,7 +70,7 @@ try {
     $db->commit();
     $_SESSION['cart'] = [];
 
-    // SKICKA MEJL MED PHPMailer
+    // SKICKA MEJL
     try {
         $mail = new PHPMailer(true);
 
@@ -108,17 +102,16 @@ try {
         $mail->send();
     } catch (Exception $mailErr) {
         error_log("E-postfel: " . $mailErr->getMessage());
-        // Fortsätt ändå – ordern är lagd
     }
 
-    ob_end_clean();
-    echo json_encode(['success' => true, 'order_id' => $order_id]);
+    // Redirect till profil med lyckad beställning
+    header("Location: profile.php?success=order");
+    exit;
 
 } catch (Exception $e) {
     if ($db && $db->inTransaction()) {
         $db->rollBack();
     }
-    ob_end_clean();
-    echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+    header("Location: checkout.php?error=server");
+    exit;
 }
-?>

@@ -1,65 +1,38 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Profil</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400&display=swap" rel="stylesheet" />
+
   <header>
     <h1 class="logo">Elm</h1>
     <nav>
       <a class="menu-link" href="shop.php">Produkter</a>
       <a class="menu-link" href="contact.html">Kontakt</a>
-      <a class="link-on-page" href="profile.html">Profil</a>
+      <a class="link-on-page" href="profile.php">Profil</a>
       <button id="cart-icon" class="menu-link">🛒 <span id="cart-count">(0)</span></button>
     </nav>
   </header>
 
   <section id="cart-dropdown" class="cart-dropdown">
     <h3>Din kundvagn</h3>
-    <div id="cart-items"></div>
-    <button class="checkout-btn" onclick="window.location.href='checkout.html'">Gå till kassan</button>
+    <section id="cart-items"></section>
+    <button class="checkout-btn" onclick="window.location.href='checkout.php'">Gå till kassan</button>
   </section>
 
   <main>
-      <p class="slogan-subtext">Din grönaste växtbutik på nätet</p>
-      <hr class="slogan-line">
-
+    <p class="slogan-subtext">Din grönaste växtbutik på nätet</p>
+    <hr class="slogan-line" />
     <h1>Min profil</h1>
 
-    <section id="user-panel">
-      <form id="login-form">
-        <input type="email" name="email" placeholder="E-post" required>
-        <input type="password" name="password" placeholder="Lösenord" required>
-        <button type="submit">Logga in</button>
-        <p>Har inget konto? <a href="register.html">Registrera dig här</a>.</p>
-      </form>
-
-      <p id="welcome-msg" class="hidden"></p>
-    </section>
-
-    <section id="order-history-section" class="hidden">
-      <h2>Mina tidigare ordrar</h2>
-      <ul id="order-list"></ul>
-    </section>
-
-    <section id="logout-section" class="hidden">
-      <a href="logout.php" class="logout-btn">Logga ut</a>
-    </section>
-
-    <!-- Modal för orderdetaljer -->
-    <section id="order-modal" class="modal hidden">
-      <div class="modal-content">
-        <button class="close-btn" id="close-modal">&times;</button>
-        <h3>Orderdetaljer</h3>
-        <pre id="order-details"></pre>
-      </div>
-    </section>
+    {{profile-content}}
+    {{order-modal}}
   </main>
   <script src="script.js"></script>
 </body>

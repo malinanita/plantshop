@@ -1,31 +1,24 @@
 <?php
 session_start();
-require 'db.php';
-
-header('Content-Type: application/json');
+require_once "db.php";
 
 $email = $_POST['email'] ?? '';
 $password = $_POST['password'] ?? '';
 
-if (!$email || !$password) {
-    echo json_encode(['success' => false, 'message' => 'E-post och lösenord krävs.']);
-    exit;
-}
+// Hämta användare
+$stmt = $db->prepare("SELECT id, name, email, password FROM users WHERE email = ?");
+$stmt->execute([$email]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-try {
-    $stmt = $db->prepare("SELECT id, name, password FROM users WHERE email = ?");
-    $stmt->execute([$email]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$user || !password_verify($password, $user['password'])) {
-        echo json_encode(['success' => false, 'message' => 'Fel e-post eller lösenord.']);
-        exit;
-    }
-
+// Verifiera lösenord
+if ($user && password_verify($password, $user['password'])) {
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['name'] = $user['name'];
+    $_SESSION['email'] = $user['email'];
 
-    echo json_encode(['success' => true, 'name' => $user['name'] ?? '']);
-} catch (Exception $e) {
-    echo json_encode(['success' => false, 'message' => 'Serverfel.']);
+    header("Location: profile.php");
+    exit;
+} else {
+    header("Location: profile.php?error=invalid");
+    exit;
 }

@@ -156,7 +156,7 @@ body {
     object-fit: cover;
   }
   
-  /* LÄGG I KUNDVAGN */
+  /* BUTTONS */
   .btn {
     font-family: 'IBM Plex Sans', sans-serif;
     background-color: #ffbc3f; 
@@ -430,6 +430,8 @@ body {
     background-color: #eaa216;
   }
   
+
+  /* PROFIL */
   #logout-section {
     margin-top: 3em;
     text-align: center;
@@ -443,6 +445,22 @@ body {
   #logout-section {
     margin-top: 3em;
     text-align: center;
+  }
+
+  .error-msg {
+    color: darkred;
+    font-weight: bold;
+    margin-bottom: 1em;
+  }
+
+  .success-msg {
+    background-color: #e1f3e8;
+    color: #2d6637;
+    border: 1px solid #b2d8c2;
+    padding: 1em;
+    border-radius: 5px;
+    font-weight: bold;
+    margin-bottom: 1em;
   }
 
   .hidden {
