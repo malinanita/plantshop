@@ -184,6 +184,21 @@ body {
     background-color: rgba(201, 134, 0, 0.7);
   }
 
+  .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #555;
+    z-index: 10;
+  }
+  
+  .close-btn:hover {
+    color: #000;
+  }
+  
+
   .logout-btn {
     font-family: 'IBM Plex Sans', sans-serif;
     background-color: #ffbc3f; 
@@ -315,6 +330,7 @@ body {
   }
   
   #cart-dropdown {
+    position: relative;
     display: none;
     position: fixed;
     top: 60px;

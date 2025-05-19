@@ -63,15 +63,22 @@
       cartCount.textContent = `(${totalCount})`;
     }
   }
+
+  function toggleCart() {
+    const cartDropdown = document.getElementById("cart-dropdown");
+    if (cartDropdown) cartDropdown.classList.toggle("show");
+  }
+
+  function closeCart() {
+    const cartDropdown = document.getElementById("cart-dropdown");
+    if (cartDropdown) cartDropdown.classList.remove("show");
+  }
+
   
   // ==========================
   // Filtrering
   // ==========================
   
-  function toggleCart() {
-    const cartDropdown = document.getElementById("cart-dropdown");
-    if (cartDropdown) cartDropdown.classList.toggle("show");
-  }
   
   function toggleFilterDropdown() {
     const filterDropdown = document.getElementById("filter-dropdown");
