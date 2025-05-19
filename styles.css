@@ -528,15 +528,22 @@ body {
     #product-list article {
       width: 100% !important;
     }
-  
+
+    header {
+      display: flex;
+      justify-content: center;
+    }
+
     main {
       padding: 0.5em;
       justify-content: center;
+      margin-bottom: 3em;
     }
   
     img {
       height: auto;
       max-height: 500px;
     }
+
   }
   
