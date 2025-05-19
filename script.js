@@ -73,7 +73,6 @@
     const cartDropdown = document.getElementById("cart-dropdown");
     if (cartDropdown) cartDropdown.classList.remove("show");
   }
-
   
   // ==========================
   // Filtrering
@@ -89,8 +88,17 @@
   // ==========================
   // DOM Ready
   // ==========================
-  
+
   document.addEventListener("DOMContentLoaded", () => {
+    const hamburger = document.getElementById("hamburger");
+    const nav = document.querySelector("header nav");
+  
+    if (hamburger && nav) {
+      hamburger.addEventListener("click", () => {
+        nav.classList.toggle("show");
+      });
+    }
+
     const cartIcon = document.getElementById("cart-icon");
     const filterToggle = document.getElementById("filter-toggle");
   
@@ -98,11 +106,12 @@
     if (filterToggle) filterToggle.addEventListener("click", toggleFilterDropdown);
   
     updateCartUI();
+
   
   
-    // ======================
-    // Registreringsformulär
-    // ======================
+  // ======================
+  // Registreringsformulär
+  // ======================
   
     const registerForm = document.getElementById("register-form");
     const feedback = document.getElementById("feedback");

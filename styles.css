@@ -39,6 +39,16 @@ body {
     gap: 1em;
     align-items: flex-end;
   }
+
+  .hamburger {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    color: #FFA01B;
+    margin-left: 10px;
+  }
   
   h1 {
   margin: 0;
@@ -530,20 +540,28 @@ body {
     }
 
     header {
-      display: flex;
-      justify-content: center;
-    }
-
-    main {
-      padding: 0.5em;
-      justify-content: center;
-      margin-bottom: 3em;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
   
-    img {
-      height: auto;
-      max-height: 500px;
+    nav {
+      display: none;
+      flex-direction: column-reverse;
+      align-items: flex-end;
+      width: 100%;
+      margin-top: 0.5em;
     }
+  
+    nav.show {
+      display: flex;
+    }
+  
+    .hamburger {
+      display: block;
+    }
+
 
   }
   
