@@ -38,6 +38,9 @@ foreach ($products as $product) {
   $productHtml .= "<h3>{$product['name']}</h3>";
   $productHtml .= "<p>{$product['price']} kr</p>";
   $productHtml .= "</a>";
+
+  $productHtml .= "<button class='btn' data-product-id='{$product['id']}' data-product-name='{$product['name']}' 
+      data-product-image='{$product['image_url']}' data-product-price='{$product['price']}'>Lägg i kundvagn</button>";
   $productHtml .= "</article>";
 }
 
