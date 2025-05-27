@@ -1,6 +1,6 @@
+<!-- /src/product.html -->
 <!DOCTYPE html>
 <html lang="sv">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,15 +8,15 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400&display=swap" rel="stylesheet" />
+
   <header>
     <h1 class="logo">Elm</h1>
     <button id="hamburger" class="hamburger">&#9776;</button>
     <nav>
-      <a class="link-on-page" href="shop.html">Produkter</a>
+      <a class="menu-link" href="shop.php">Produkter</a>
       <a class="menu-link" href="contact.html">Kontakt</a>
       <a class="menu-link" href="profile.php">Profil</a>
       <button id="cart-icon" class="menu-link">🛒 <span id="cart-count">(0)</span></button>
@@ -24,18 +24,17 @@
   </header>
 
   <section id="cart-dropdown" class="cart-dropdown">
-    <span class="close-btn" onclick="closeCart()">&#10005;</span>
+    <span class="close-btn" data-action="close-cart">&#10005;</span>
     <h3>Din kundvagn</h3>
     <section id="cart-items"></section>
-    <button class="checkout-btn" onclick="window.location.href='checkout.php'">Gå till kassan</button>
+    <button class="checkout-btn" data-action="go-checkout">Gå till kassan</button>
   </section>
 
-<main class="product-page">
-  <a href="shop.php" class="back-button">← Tillbaka till butiken</a>
-  {{product-detail}}
-  </br>
-</main>
+  <main class="product-page">
+    <a href="shop.php" class="back-button">← Tillbaka till butiken</a>
+    {{product-detail}}
+  </main>
 
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

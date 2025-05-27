@@ -538,6 +538,9 @@ body {
     #product-list article {
       width: 100% !important;
     }
+    .shop-img {
+      max-width: 90%;
+    }
 
     header {
       flex-direction: row;
@@ -560,6 +563,11 @@ body {
   
     .hamburger {
       display: block;
+    }
+
+    .product-image-large {
+      max-width: 65%;
+      height: auto;
     }
 
 

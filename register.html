@@ -1,3 +1,4 @@
+<!-- /src/register.html -->
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -16,34 +17,34 @@
     <nav>
       <a class="menu-link" href="shop.php">Produkter</a>
       <a class="menu-link" href="contact.html">Kontakt</a>
-      <a class="link-on-page" href="profile.html">Profil</a>
+      <a class="link-on-page" href="profile.php">Profil</a>
       <button id="cart-icon" class="menu-link">🛒 <span id="cart-count">(0)</span></button>
     </nav>
   </header>
 
   <section id="cart-dropdown" class="cart-dropdown">
-    <span class="close-btn" onclick="closeCart()">&#10005;</span>
+    <span class="close-btn" data-action="close-cart">&#10005;</span>
     <h3>Din kundvagn</h3>
     <section id="cart-items"></section>
-    <button class="checkout-btn" onclick="window.location.href='checkout.php'">Gå till kassan</button>
+    <button class="checkout-btn" data-action="go-checkout">Gå till kassan</button>
   </section>
 
-    <main>
-        <p class="slogan-subtext">Din grönaste växtbutik på nätet</p>
-        <hr class="slogan-line">
+  <main>
+    <p class="slogan-subtext">Din grönaste växtbutik på nätet</p>
+    <hr class="slogan-line">
 
-        <h1>Skapa konto</h1>
+    <h1>Skapa konto</h1>
 
-        <form id="register-form">
-          <input type="text" name="name" placeholder="Namn" required><br>
-          <input type="email" name="email" placeholder="E-post" required><br>
-          <input type="password" name="password" placeholder="Lösenord" required><br>
-          <button type="submit">Registrera</button>
-          <p>Har du redan ett konto? <a href="profile.html">Logga in här</a>.</p>
-          <p id="feedback"></p>
-      </form>
-    </main>
-  
+    <form id="register-form">
+      <input type="text" name="name" placeholder="Namn" required><br>
+      <input type="email" name="email" placeholder="E-post" required><br>
+      <input type="password" name="password" placeholder="Lösenord" required><br>
+      <button type="submit">Registrera</button>
+      <p>Har du redan ett konto? <a href="profile.php">Logga in här</a>.</p>
+      <p id="feedback">{{feedback}}</p>
+    </form>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>

@@ -107,7 +107,15 @@
   
     updateCartUI();
 
-  
+    document.querySelectorAll("[data-product-id]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-product-id");
+        const name = btn.getAttribute("data-product-name");
+        const image = btn.getAttribute("data-product-image");
+        const price = btn.getAttribute("data-product-price");
+        addToCart(id, name, image, parseFloat(price));
+      });
+    });
   
   // ======================
   // Registreringsformulär
@@ -143,6 +151,16 @@
         }
       });
     }
+
+    document.querySelectorAll("[data-action='close-cart']").forEach(btn =>
+      btn.addEventListener("click", closeCart)
+    );
+  
+    document.querySelectorAll("[data-action='go-checkout']").forEach(btn =>
+      btn.addEventListener("click", () => {
+        window.location.href = 'checkout.php';
+      })
+    );
 
   });
   

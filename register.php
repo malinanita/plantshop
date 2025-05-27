@@ -1,33 +1,31 @@
 <?php
-require 'db.php';
-header('Content-Type: application/json');
+require_once "db.php";
+session_start();
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = trim($_POST['name'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
+$template = file_get_contents("register.html");
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $name = trim($_POST["name"] ?? "");
+    $email = trim($_POST["email"] ?? "");
+    $password = $_POST["password"] ?? "";
 
     if (!$name || !$email || !$password) {
-        echo json_encode(['success' => false, 'message' => 'Fyll i alla fält.']);
-        exit;
-    }
-
-    try {
+        $feedback = "<span class='error-msg'>Fyll i alla fält.</span>";
+    } else {
         $stmt = $db->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
-
         if ($stmt->fetch()) {
-            echo json_encode(['success' => false, 'message' => 'E-postadressen är redan registrerad.']);
-            exit;
+            $feedback = "<span class='error-msg'>E-postadressen är redan registrerad.</span>";
+        } else {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $stmt = $db->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+            $stmt->execute([$name, $email, $hashedPassword]);
+            $feedback = "<span class='success-msg'>Registrering lyckades! Du kan nu logga in.</span>";
         }
-
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $db->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
-        $stmt->execute([$name, $email, $hashedPassword]);
-
-        echo json_encode(['success' => true]);
-
-    } catch (PDOException $e) {
-        echo json_encode(['success' => false, 'message' => 'Fel vid registrering: ' . $e->getMessage()]);
     }
+} else {
+    $feedback = "";
 }
+
+$template = str_replace("{{feedback}}", $feedback, $template);
+echo $template;

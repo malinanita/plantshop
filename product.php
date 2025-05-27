@@ -1,42 +1,30 @@
 <?php
-require_once "db.php"; // Använd rätt databasanslutning
+require_once "db.php";
+session_start();
 
-// Läs in produkt-id från URL
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    http_response_code(400);
-    echo "Ogiltigt produkt-ID.";
-    exit;
+if (!isset($_GET['id'])) {
+  header("Location: shop.php");
+  exit;
 }
 
-$id = $_GET['id'];
-$stmt = $db->prepare("SELECT id, name, description, price, image_url FROM products WHERE id = ?");
+$id = (int) $_GET['id'];
+$stmt = $db->prepare("SELECT name, description, price, image_url FROM products WHERE id = ?");
 $stmt->execute([$id]);
 $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$product) {
-    $productHtml = "<p>Produkten kunde inte hittas.</p>";
-} else {
-    // Skydda mot specialtecken i HTML och JavaScript
-    $safeId = (int)$product['id'];
-    $safeName = htmlspecialchars($product['name'], ENT_QUOTES);
-    $safeDescription = htmlspecialchars($product['description'], ENT_QUOTES);
-    $safeImage = htmlspecialchars($product['image_url'], ENT_QUOTES);
-    $safePrice = (float)$product['price'];
+$template = file_get_contents("product.html");
 
-    $productHtml = <<<HTML
-<article>
-  <img src="{$safeImage}" alt="{$safeName}" class="product-image-large">
-  <h1>{$safeName}</h1>
-  <p class="price">{$safePrice} kr</p>
-  <p class="description">{$safeDescription}</p>
-  <button class="btn" onclick="addToCart({$safeId}, '{$safeName}', '{$safeImage}', {$safePrice})">Lägg i kundvagn</button>
-</article>
-HTML;
+if (!$product) {
+  $productHtml = "<p>Produkten kunde inte hittas.</p>";
+} else {
+  $productHtml = "<article>";
+  $productHtml .= "<figure><img class='product-image-large' src='{$product['image_url']}' alt='{$product['name']}'></figure>";
+  $productHtml .= "<h2>{$product['name']}</h2>";
+  $productHtml .= "<p>{$product['description']}</p>";
+  $productHtml .= "<p><strong>{$product['price']} kr</strong></p>";
+  $productHtml .= "<button class='btn' data-product-id='{$id}' data-product-name='{$product['name']}' data-product-image='{$product['image_url']}' data-product-price='{$product['price']}'>Lägg i kundvagn</button>";
+  $productHtml .= "</article>";
 }
 
-// Läs in HTML-mall och ersätt placeholder
-$template = file_get_contents("product.html");
-$output = str_replace("{{product-detail}}", $productHtml, $template);
-
-// Visa sidan
-echo $output;
+$template = str_replace("{{product-detail}}", $productHtml, $template);
+echo $template;

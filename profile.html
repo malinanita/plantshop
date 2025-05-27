@@ -1,3 +1,4 @@
+<!-- /src/profile.html -->
 <!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -22,10 +23,10 @@
   </header>
 
   <section id="cart-dropdown" class="cart-dropdown">
-    <span class="close-btn" onclick="closeCart()">&#10005;</span>
+    <span class="close-btn" data-action="close-cart">&#10005;</span>
     <h3>Din kundvagn</h3>
     <section id="cart-items"></section>
-    <button class="checkout-btn" onclick="window.location.href='checkout.php'">Gå till kassan</button>
+    <button class="checkout-btn" data-action="go-checkout">Gå till kassan</button>
   </section>
 
   <main>
