@@ -12,5 +12,5 @@ if (ini_get("session.use_cookies")) {
     );
 }
 
-header("Location: login.html"); // eller index.html eller vad du vill
+header("Location: login.php");
 exit();

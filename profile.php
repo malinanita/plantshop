@@ -106,7 +106,7 @@ if (!isset($_SESSION['user_id'])) {
     <input type="email" name="email" placeholder="E-post" required>
     <input type="password" name="password" placeholder="Lösenord" required>
     <button type="submit">Logga in</button>
-    <p>Har inget konto? <a href="register.html">Registrera dig här</a>.</p>
+    <p>Har du inget konto? <a href="register.php">Registrera dig här</a>.</p>
   </form>
 </section>
 HTML;
