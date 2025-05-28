@@ -94,7 +94,7 @@ if (!isset($_SESSION['user_id'])) {
                 <section class="modal">
                     <article class="modal-content">
                         <a href="profile.php" class="close-btn">&#10005;</a>
-                        <h3>Orderdetaljer</h3>
+                        <h3>📦 Orderdetaljer</h3>
                         <p><strong>Order #: </strong>{$order['id']}</p>
                         <p><strong>Datum: </strong>{$orderDate}</p>
                         <p><strong>Totalt: </strong>{$order['total_price']} kr</p>
