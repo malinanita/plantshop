@@ -1,20 +1,32 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 require_once "db.php";
 
-if (!isset($_SESSION['user_id'])) {
-    $profileContent = <<<HTML
-<section id="user-panel">
-  <p>Du är inte inloggad.</p>
-  <form method="POST" action="login.php">
-    <input type="email" name="email" placeholder="E-post" required>
-    <input type="password" name="password" placeholder="Lösenord" required>
-    <button type="submit">Logga in</button>
-  </form>
-</section>
-HTML;
+$errorMessage = "";
+$profileContent = "";
+$orderModal = "";
 
-    $orderModal = "";
+// Om användaren inte är inloggad
+if (!isset($_SESSION['user_id'])) {
+    if (isset($_GET['error']) && $_GET['error'] === "invalid") {
+        $errorMessage = "<p class='error-msg'>Fel e-post eller lösenord. Försök igen.</p>";
+    }
+
+    $profileContent = <<<HTML
+        <section id="user-panel">
+            $errorMessage
+            <form method="POST" action="login.php">
+                <input type="email" name="email" placeholder="E-post" required>
+                <input type="password" name="password" placeholder="Lösenord" required>
+                <button type="submit">Logga in</button>
+                <p>Har du inget konto? <a href="register.php">Registrera dig här</a>.</p>
+            </form>
+        </section>
+    HTML;
 
 } else {
     $userId = $_SESSION['user_id'];
@@ -37,26 +49,26 @@ HTML;
 
     $successMessage = "";
     if (isset($_GET['success']) && $_GET['success'] === 'order') {
-        $successMessage = "<p class='success-msg'>Tack för din beställning! 🌿 </br> En orderbekräftelse har skickats till din mail. </p>";
+        $successMessage = "<p class='success-msg'>Tack för din beställning! 🌿<br>En orderbekräftelse har skickats till din mail.</p>";
     }
 
     $profileContent = <<<HTML
-    <section>
-      $successMessage
-      <p>Välkommen, $userName!</p>
-      <a href="logout.php" class="logout-btn">Logga ut</a>
-    </section>
+        <section>
+            $successMessage
+            <section class="profile-header">
+                <p>Välkommen, $userName!</p>
+                <a href="logout.php" class="logout-btn">Logga ut</a>
+            </section>
+        </section>
 
+        <section>
+            <h2>Mina tidigare ordrar</h2>
+            <ul class="order-list">
+                $orderList
+            </ul>
+        </section>
+    HTML;
 
-<section>
-  <h2>Mina tidigare ordrar</h2>
-  <ul>
-    $orderList
-  </ul>
-</section>
-HTML;
-
-    $orderModal = "";
     if (isset($_GET['order_id']) && is_numeric($_GET['order_id'])) {
         $orderId = $_GET['order_id'];
         $stmt = $db->prepare("SELECT * FROM orders WHERE id = ? AND user_id = ?");
@@ -64,7 +76,10 @@ HTML;
         $order = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($order) {
-            $stmt = $db->prepare("SELECT name, quantity, price_at_purchase FROM order_items WHERE order_id = ?");
+            $stmt = $db->prepare("SELECT oi.product_id, oi.quantity, oi.price_at_purchase, p.name 
+                                  FROM order_items oi 
+                                  JOIN products p ON oi.product_id = p.id 
+                                  WHERE oi.order_id = ?");
             $stmt->execute([$orderId]);
             $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -76,47 +91,22 @@ HTML;
             $orderDate = (new DateTime($order['created_at']))->format("Y-m-d");
 
             $orderModal = <<<HTML
-<section class="modal">
-  <div class="modal-content">
-    <a href="profile.php" class="close-btn">❌</a>
-    <h3>Orderdetaljer</h3>
-    <p><strong>Order #: </strong>{$order['id']}</p>
-    <p><strong>Datum: </strong>{$orderDate}</p>
-    <p><strong>Totalt: </strong>{$order['total_price']} kr</p>
-    <p><strong>Produkter:</strong><br>$itemList</p>
-  </div>
-</section>
-HTML;
+                <section class="modal">
+                    <article class="modal-content">
+                        <a href="profile.php" class="close-btn">&#10005;</a>
+                        <h3>Orderdetaljer</h3>
+                        <p><strong>Order #: </strong>{$order['id']}</p>
+                        <p><strong>Datum: </strong>{$orderDate}</p>
+                        <p><strong>Totalt: </strong>{$order['total_price']} kr</p>
+                        <p><strong>Produkter:</strong><br>$itemList</p>
+                    </article>
+                </section>
+            HTML;
         }
     }
 }
 
-// Visa felmeddelande om inloggningen misslyckades
-$errorMessage = "";
-if (isset($_GET['error']) && $_GET['error'] === "invalid") {
-    $errorMessage = "<p class='error-msg'>Fel e-post eller lösenord. Försök igen.</p>";
-}
-
-// Lägg in felmeddelandet i formuläret om det finns
-if (!isset($_SESSION['user_id'])) {
-    $profileContent = <<<HTML
-<section id="user-panel">
-  $errorMessage
-  <form method="POST" action="login.php">
-    <input type="email" name="email" placeholder="E-post" required>
-    <input type="password" name="password" placeholder="Lösenord" required>
-    <button type="submit">Logga in</button>
-    <p>Har du inget konto? <a href="register.php">Registrera dig här</a>.</p>
-  </form>
-</section>
-HTML;
-    $orderModal = "";
-}
-
-// Ladda HTML-mall
 $template = file_get_contents("profile.html");
-
-// Ersätt placeholders
 $template = str_replace("{{profile-content}}", $profileContent, $template);
 $template = str_replace("{{order-modal}}", $orderModal, $template);
 

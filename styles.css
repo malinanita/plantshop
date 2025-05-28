@@ -89,7 +89,6 @@ body {
     padding: 0;
     align-self: center; 
 }
-
   
   
 /* FILTER */
@@ -166,6 +165,7 @@ body {
     object-fit: cover;
   }
   
+
   /* BUTTONS */
   .btn {
     font-family: 'IBM Plex Sans', sans-serif;
@@ -202,10 +202,11 @@ body {
     cursor: pointer;
     color: #555;
     z-index: 10;
+    text-decoration: none;
   }
   
   .close-btn:hover {
-    color: #000;
+    color: #1a1a1a;
   }
   
 
@@ -313,6 +314,7 @@ body {
     transition: color 0.2s ease;
   }
   
+
   /* KUNDVAGN */
   #cart-icon {
     font-family: 'IBM Plex Sans', sans-serif;
@@ -405,6 +407,7 @@ body {
     color: rgb(131, 65, 0);
   }
   
+
   /* CHECKOUT */
   #cart-container {
     display: flex;
@@ -463,14 +466,13 @@ body {
     text-align: center;
   }
   
-  #order-list li:hover {
-    text-decoration: underline;
-  }
-  
-  
   #logout-section {
     margin-top: 3em;
     text-align: center;
+  }
+
+  .profile-header {
+    display: block;
   }
 
   .error-msg {
@@ -492,6 +494,38 @@ body {
   .hidden {
     display: none !important;
   }
+
+  .order-list {
+    list-style: none;
+    padding: 0;
+    margin: 1em 0;
+  }
+  
+  .order-list li {
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    margin-bottom: 1em;
+    margin-left: 5em;
+    margin-right: 5em;
+    padding: 1em;
+    transition: background-color 0.3s ease;
+  }
+
+  .order-list li:hover {
+    background-color: #ffc861;
+  }
+
+  .order-list li:active {
+    background-color: #dd8a26;
+  }
+  
+  .order-list a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    display: block;
+  }
+  
   
   .modal {
     position: fixed;

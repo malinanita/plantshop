@@ -82,7 +82,6 @@ function toggleFilterDropdown() {
 // ==========================
 // DOM Ready
 // ==========================
-
 document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.getElementById("hamburger");
   const nav = document.querySelector("header nav");
@@ -111,6 +110,12 @@ document.addEventListener("DOMContentLoaded", () => {
       addToCart(id, name, image, parseFloat(price));
     });
   });
+
+  // Scrolla till modal om den finns
+  const modal = document.querySelector(".modal");
+  if (modal) {
+    modal.scrollIntoView({ behavior: "smooth" });
+  }
 
   // Kundvagn och checkout
   document.querySelectorAll("[data-action='close-cart']").forEach(btn =>
