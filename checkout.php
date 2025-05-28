@@ -24,9 +24,15 @@ if (!isset($_SESSION["cart"]) || count($_SESSION["cart"]) === 0) {
 // Eventuellt felmeddelande
 $error = "";
 if (isset($_GET["error"])) {
-    $error = "<p class='error-msg'>{$_GET['error']}</p>";
+    $errorType = trim($_GET["error"]);
+    if ($errorType === "empty") {
+        $error = "<p class='error-msg'>Din kundvagn är tom. Vänligen lägg till produkter innan du slutför köpet 🌿</p>";
+    } elseif ($errorType === "login") {
+        $error = "<p class='error-msg'>Oj! Du måste vara inloggad för att slutföra ditt köp.</p>";
+    } else {
+        $error = "<p class='error-msg'>Ett fel inträffade. Försök igen.</p>";
+    }
 }
-
 // Ersätt placeholders
 $template = str_replace("{{cart-items}}", $cartItems, $template);
 $template = str_replace("{{error-message}}", $error, $template);
