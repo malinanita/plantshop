@@ -44,7 +44,7 @@ async function updateCartUI() {
     cartCount.textContent = "(0)";
   } else {
     cart.forEach((item) => {
-      const cartItem = document.createElement("div");
+      const cartItem = document.createElement("section");
       cartItem.classList.add("cart-item");
 
       const span = document.createElement("span");
