@@ -6,27 +6,18 @@ error_reporting(E_ALL);
 session_start();
 require_once "db.php";
 
-$errorMessage = "";
 $profileContent = "";
 $orderModal = "";
 
-// Om användaren inte är inloggad
 if (!isset($_SESSION['user_id'])) {
+    $loginError = "";
+
     if (isset($_GET['error']) && $_GET['error'] === "invalid") {
-        $errorMessage = "<p class='error-msg'>Fel e-post eller lösenord. Försök igen.</p>";
+        $loginError = file_get_contents("templates/profile_login_error.html");
     }
 
-    $profileContent = <<<HTML
-        <section id="user-panel">
-            $errorMessage
-            <form method="POST" action="login.php">
-                <input type="email" name="email" placeholder="E-post" required>
-                <input type="password" name="password" placeholder="Lösenord" required>
-                <button type="submit">Logga in</button>
-                <p>Har du inget konto? <a href="register.php">Registrera dig här</a>.</p>
-            </form>
-        </section>
-    HTML;
+    $notLoggedInTemplate = file_get_contents("templates/profile_not_logged_in.html");
+    $profileContent = str_replace("{{login-error}}", $loginError, $notLoggedInTemplate);
 
 } else {
     $userId = $_SESSION['user_id'];
@@ -36,39 +27,36 @@ if (!isset($_SESSION['user_id'])) {
     $stmt->execute([$userId]);
     $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $orderList = "";
+    // Orderlista
     if (empty($orders)) {
-        $orderList = "<li>Du har inga tidigare ordrar.</li>";
+        $orderList = file_get_contents("templates/profile_order_empty.html");
     } else {
+        $orderList = "";
         foreach ($orders as $order) {
-            $orderId = $order['id'];
-            $date = (new DateTime($order['created_at']))->format("Y-m-d");
-            $orderList .= "<li><a href='profile.php?order_id=$orderId'>🧾 Order #$orderId – $date – {$order['total_price']} kr</a></li>";
+            $orderItemTemplate = file_get_contents("templates/profile_order_item.html");
+            $orderList .= str_replace(
+                ['{{order_id}}', '{{date}}', '{{total}}'],
+                [$order['id'], (new DateTime($order['created_at']))->format("Y-m-d"), $order['total_price']],
+                $orderItemTemplate
+            );
         }
     }
 
+    // Lyckad beställning
     $successMessage = "";
     if (isset($_GET['success']) && $_GET['success'] === 'order') {
-        $successMessage = "<p class='success-msg'>Tack för din beställning! 🌿<br>En orderbekräftelse har skickats till din mail.</p>";
+        $successMessage = file_get_contents("templates/profile_order_success.html");
     }
 
-    $profileContent = <<<HTML
-        <section>
-            $successMessage
-            <section class="profile-header">
-                <p>Välkommen, $userName!</p>
-                <a href="logout.php" class="logout-btn">Logga ut</a>
-            </section>
-        </section>
+    // Bygg profilsektionen
+    $loggedInTemplate = file_get_contents("templates/profile_logged_in.html");
+    $profileContent = str_replace(
+        ['{{user}}', '{{order-success}}', '{{order-list}}'],
+        [$userName, $successMessage, $orderList],
+        $loggedInTemplate
+    );
 
-        <section>
-            <h2>Mina tidigare ordrar</h2>
-            <ul class="order-list">
-                $orderList
-            </ul>
-        </section>
-    HTML;
-
+    // Visa ordermodal om ?order_id finns
     if (isset($_GET['order_id']) && is_numeric($_GET['order_id'])) {
         $orderId = $_GET['order_id'];
         $stmt = $db->prepare("SELECT * FROM orders WHERE id = ? AND user_id = ?");
@@ -90,22 +78,17 @@ if (!isset($_SESSION['user_id'])) {
 
             $orderDate = (new DateTime($order['created_at']))->format("Y-m-d");
 
-            $orderModal = <<<HTML
-                <section class="modal">
-                    <article class="modal-content">
-                        <a href="profile.php" class="close-btn">&#10005;</a>
-                        <h3>📦 Orderdetaljer</h3>
-                        <p><strong>Order #: </strong>{$order['id']}</p>
-                        <p><strong>Datum: </strong>{$orderDate}</p>
-                        <p><strong>Totalt: </strong>{$order['total_price']} kr</p>
-                        <p><strong>Produkter:</strong><br>$itemList</p>
-                    </article>
-                </section>
-            HTML;
+            $modalTemplate = file_get_contents("templates/profile_order_modal.html");
+            $orderModal = str_replace(
+                ['{{order_id}}', '{{order_date}}', '{{total_price}}', '{{item_list}}'],
+                [$order['id'], $orderDate, $order['total_price'], $itemList],
+                $modalTemplate
+            );
         }
     }
 }
 
+// Ladda sidmall
 $template = file_get_contents("profile.html");
 $template = str_replace("{{profile-content}}", $profileContent, $template);
 $template = str_replace("{{order-modal}}", $orderModal, $template);
