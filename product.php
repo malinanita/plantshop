@@ -15,15 +15,14 @@ $product = $stmt->fetch(PDO::FETCH_ASSOC);
 $template = file_get_contents("product.html");
 
 if (!$product) {
-  $productHtml = "<p>Produkten kunde inte hittas.</p>";
+  $productHtml = file_get_contents("templates/product_not_found.html");
 } else {
-  $productHtml = "<article>";
-  $productHtml .= "<figure><img class='product-image-large' src='{$product['image_url']}' alt='{$product['name']}'></figure>";
-  $productHtml .= "<h2>{$product['name']}</h2>";
-  $productHtml .= "<p>{$product['description']}</p>";
-  $productHtml .= "<p><strong>{$product['price']} kr</strong></p>";
-  $productHtml .= "<button class='btn' data-product-id='{$id}' data-product-name='{$product['name']}' data-product-image='{$product['image_url']}' data-product-price='{$product['price']}'>Lägg i kundvagn</button>";
-  $productHtml .= "</article>";
+  $productTemplate = file_get_contents("templates/product_detail.html");
+  $productHtml = str_replace(
+    ['{{id}}', '{{name}}', '{{description}}', '{{price}}', '{{image_url}}'],
+    [$id, $product['name'], $product['description'], $product['price'], $product['image_url']],
+    $productTemplate
+  );
 }
 
 $template = str_replace("{{product-detail}}", $productHtml, $template);
