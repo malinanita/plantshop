@@ -2,7 +2,6 @@
 require_once "db.php";
 session_start();
 
-// Ladda HTML-mallen
 $template = file_get_contents("shop.html");
 
 // Hantera filter
@@ -29,22 +28,17 @@ $stmt = $db->prepare($sql);
 $stmt->execute($selected);
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Rendera produktlista
+// Bygg produktlistan
 $productHtml = "";
-foreach ($products as $product) {
-  $productHtml .= "<article>";
-  $productHtml .= "<a class='product-link' href='product.php?id={$product['id']}'>";
-  $productHtml .= "<figure><img src='{$product['image_url']}' alt='{$product['name']}' /></figure>";
-  $productHtml .= "<h3>{$product['name']}</h3>";
-  $productHtml .= "<p>{$product['price']} kr</p>";
-  $productHtml .= "</a>";
+$productTemplate = file_get_contents("templates/shop_product_card.html");
 
-  $productHtml .= "<button class='btn' data-product-id='{$product['id']}' data-product-name='{$product['name']}' 
-      data-product-image='{$product['image_url']}' data-product-price='{$product['price']}'>Lägg i kundvagn</button>";
-  $productHtml .= "</article>";
+foreach ($products as $product) {
+  $productHtml .= str_replace(
+    ['{{id}}', '{{name}}', '{{price}}', '{{image_url}}'],
+    [$product['id'], $product['name'], $product['price'], $product['image_url']],
+    $productTemplate
+  );
 }
 
 $template = str_replace("{{product-list}}", $productHtml, $template);
-
-// Skriv ut hela sidan
 echo $template;
