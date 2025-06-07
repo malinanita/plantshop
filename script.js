@@ -40,7 +40,9 @@ async function updateCartUI() {
   cartContainer.innerHTML = "";
 
   if (cart.length === 0) {
-    cartContainer.innerHTML = "<p>Kundvagnen är tom.</p>";
+    const emptyMsg = document.createElement("p");
+    emptyMsg.textContent = "Kundvagnen är tom.";
+    cartContainer.appendChild(emptyMsg);    
     cartCount.textContent = "(0)";
   } else {
     cart.forEach((item) => {

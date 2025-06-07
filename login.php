@@ -8,7 +8,7 @@ $template = file_get_contents("login.html");
 // Feedbackmeddelanden
 $feedback = "";
 
-// Registreringslycka
+// Registrering lyckades
 if (isset($_GET['registered']) && $_GET['registered'] === "success") {
     $feedback .= file_get_contents("templates/login_success_registration.html");
 }
