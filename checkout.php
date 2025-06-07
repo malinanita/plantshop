@@ -9,34 +9,46 @@ $template = file_get_contents("checkout.html");
 $cartItems = "";
 $total = 0;
 
-if (!isset($_SESSION["cart"]) || count($_SESSION["cart"]) === 0) {
-    $cartItems = "<p>Kundvagnen är tom.</p>";
+$cart = $_SESSION["cart"] ?? [];
+
+if (empty($cart)) {
+    $cartItems = file_get_contents("templates/checkout_empty_cart.html");
 } else {
-    foreach ($_SESSION["cart"] as $item) {
+    foreach ($cart as $item) {
+        $itemTemplate = file_get_contents("templates/checkout_item.html");
+        $itemHtml = str_replace(
+            ['{{name}}', '{{quantity}}', '{{price}}'],
+            [$item['name'], $item['quantity'], $item['price']],
+            $itemTemplate
+        );
+        $cartItems .= $itemHtml;
         $total += $item["price"] * $item["quantity"];
-        $cartItems .= "<section class='cart-item'>";
-        $cartItems .= "<p>{$item['name']} ({$item['quantity']}st) - {$item['price']} kr/st</p>";
-        $cartItems .= "</section>";
     }
-    $cartItems .= "<p><strong>Totalt: {$total} kr</strong></p>";
+
+    $totalHtml = file_get_contents("templates/checkout_total.html");
+    $totalHtml = str_replace('{{total}}', $total, $totalHtml);
+    $cartItems .= $totalHtml;
 }
 
-// Eventuellt felmeddelande
+// Eventuella felmeddelanden
 $error = "";
 if (isset($_GET["error"])) {
     $errorType = trim($_GET["error"]);
     if ($errorType === "empty") {
-        $error = "<p class='error-msg'>Din kundvagn är tom. Vänligen lägg till produkter innan du slutför köpet 🌿</p>";
+        $error = file_get_contents("templates/checkout_error_empty.html");
     } elseif ($errorType === "login") {
-        $error = "<p class='error-msg'>Oj! Du måste vara inloggad för att slutföra ditt köp.</p>";
+        $error = file_get_contents("templates/checkout_error_login.html");
     } else {
-        $error = "<p class='error-msg'>Ett fel inträffade. Försök igen.</p>";
+        $error = file_get_contents("templates/checkout_error_server.html");
     }
 }
+
 // Ersätt placeholders
-$template = str_replace("{{cart-items}}", $cartItems, $template);
-$template = str_replace("{{error-message}}", $error, $template);
+$template = str_replace(
+    ["{{cart-items}}", "{{error-message}}"],
+    [$cartItems, $error],
+    $template
+);
 
 // Skriv ut HTML
 echo $template;
-
