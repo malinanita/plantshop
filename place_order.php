@@ -14,12 +14,11 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Läs POST-data (vanligt formulär)
+// Läs POST-data
 $name = $_POST['name'] ?? '';
 $address = $_POST['address'] ?? '';
 $email = $_POST['email'] ?? '';
 
-// Validering
 if (!$name || !$address || !$email) {
     header("Location: checkout.php?error=missing");
     exit;
@@ -84,27 +83,34 @@ try {
 
         $mail->setFrom('malinanitae@gmail.com', 'Elm Växtbutik');
         $mail->addAddress($email, $name);
-
         $mail->CharSet = 'UTF-8';
+
+        // Ladda e-postmallar
+        $orderDate = date("Y-m-d H:i");
+        $replacements = [
+            '{{name}}' => $name,
+            '{{order_date}}' => $orderDate,
+            '{{total}}' => $total
+        ];
+
+        // HTML-body
+        $emailTemplate = file_get_contents("templates/email_receipt.html");
+        $emailHtml = str_replace(array_keys($replacements), array_values($replacements), $emailTemplate);
+
+        // Alt-text
+        $altTemplate = file_get_contents("templates/email_receipt.txt");
+        $altText = str_replace(array_keys($replacements), array_values($replacements), $altTemplate);
+
         $mail->isHTML(true);
         $mail->Subject = 'Tack för din beställning hos Elm 🌿';
-        $mail->Body    = "
-            <h2>Hej $name! 💛🌿</h2>
-            <p>Tack för att du beställde från Elm – din grönaste växtbutik på nätet!</p>
-            <p>Vi har mottagit din order den " . date("Y-m-d H:i") . ".</p>
-            <p><strong>Totalt:</strong> $total kr</p>
-            <p>Vi uppdaterar dig när din order har skickats!</p>
-            <br>
-            <p>Varma hälsningar,<br><strong>Elm-teamet</strong></p>
-        ";
-        $mail->AltBody = "Hej $name!\n\nTack för din beställning på $total kr.\nVi har mottagit din order den " . date("Y-m-d H:i") . ".\n\n/ Elm-teamet";
+        $mail->Body    = $emailHtml;
+        $mail->AltBody = $altText;
 
         $mail->send();
     } catch (Exception $mailErr) {
         error_log("E-postfel: " . $mailErr->getMessage());
     }
 
-    // Redirect till profil med lyckad beställning
     header("Location: profile.php?success=order");
     exit;
 

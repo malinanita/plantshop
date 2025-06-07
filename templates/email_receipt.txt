@@ -1,0 +1,7 @@
+Hej {{name}}!
+
+Tack för din beställning på {{total}} kr.
+Vi har mottagit din order den {{order_date}}.
+
+Varma hälsningar,
+Elm-teamet
