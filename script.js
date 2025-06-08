@@ -38,7 +38,6 @@ async function updateCartUI() {
 
   const cart = await fetchCart();
   cartContainer.innerHTML = "";
-
   if (cart.length === 0) {
     const emptyMsg = document.createElement("p");
     emptyMsg.textContent = "Kundvagnen är tom.";

@@ -73,7 +73,7 @@ if (!isset($_SESSION['user_id'])) {
 
             $itemList = "";
             foreach ($items as $item) {
-                $itemList .= "- {$item['name']}, {$item['quantity']} st á {$item['price_at_purchase']} kr<br>";
+                $itemList .= "- {$item['name']}, {$item['quantity']} st á {$item['price_at_purchase']} kr \n";
             }
 
             $orderDate = (new DateTime($order['created_at']))->format("Y-m-d");

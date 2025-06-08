@@ -2,6 +2,16 @@
 session_start();
 require_once "db.php";
 
+// Ta bort vara om det skickats in ett formulär
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remove_item'])) {
+    $productId = $_POST['remove_item'];
+    if (isset($_SESSION['cart'][$productId])) {
+        unset($_SESSION['cart'][$productId]);
+    }
+    header("Location: checkout.php");
+    exit;
+}
+
 // Ladda mall
 $template = file_get_contents("checkout.html");
 
@@ -10,15 +20,14 @@ $cartItems = "";
 $total = 0;
 
 $cart = $_SESSION["cart"] ?? [];
-
 if (empty($cart)) {
     $cartItems = file_get_contents("templates/checkout_empty_cart.html");
 } else {
-    foreach ($cart as $item) {
+    foreach ($cart as $id => $item) {
         $itemTemplate = file_get_contents("templates/checkout_item.html");
         $itemHtml = str_replace(
-            ['{{name}}', '{{quantity}}', '{{price}}'],
-            [$item['name'], $item['quantity'], $item['price']],
+            ['{{name}}', '{{quantity}}', '{{price}}', '{{product_id}}'],
+            [htmlspecialchars($item['name']), $item['quantity'], $item['price'], $id],
             $itemTemplate
         );
         $cartItems .= $itemHtml;
